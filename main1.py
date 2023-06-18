@@ -5,11 +5,7 @@ try:
     cur = conn.cursor()
 except Exception as e:
     print(e)
-# conn = psycopg2.connect(
-#     host="localhost",
-#     database="samosa_march",
-#     user="postgres",
-#     password="leo.steve"
+
 
 
 
