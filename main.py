@@ -35,7 +35,12 @@ def products():
 
 @app.route("/sales")
 def sales():
-    sales = [(1, 'kiwi', 40, 50),(2, 'sugar', 150, 200), (3, 'omo', 50, 70)]
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM sales;')
+    sales = cur.fetchall()
+    cur.close
+    # sales = [(1, 'kiwi', 40, 50),(2, 'sugar', 150, 200), (3, 'omo', 50, 70)]
 
     return render_template("/sales.html", sales=sales)
     
