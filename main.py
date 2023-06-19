@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import psycopg2
 
 # create an object called app
@@ -44,6 +44,21 @@ def sales():
 
     return render_template("/sales.html", sales=sales)
     
+
+
+# @app.route("/admin/inventories", methods=["GET","POST"])
+# def inventories():
+#     if request.method == "POST":
+#         #To capture data from the form
+#         name = request.form["name"]
+#         quantity = request.form["quantity"]
+#         bp = request.form["bp"]
+#         sp = request.form["sp"]
+#         # Inserting data to database
+#         cur = conn.cursor()
+#         cur.execute("INSERT INTO inventories (name,quantity, bp, sp) VALUES (%s, %s, %s, %s)",(name,quantity,bp,sp))
+#         conn.commit()
+
     
 
 app.run()
