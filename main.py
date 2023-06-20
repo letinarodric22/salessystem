@@ -59,6 +59,6 @@ def sales():
 #         cur.execute("INSERT INTO inventories (name,quantity, bp, sp) VALUES (%s, %s, %s, %s)",(name,quantity,bp,sp))
 #         conn.commit()
 
-    
+#         return render_template("/inventories.html", inventories=inventories) 
 
 app.run()
