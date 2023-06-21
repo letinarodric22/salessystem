@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>products datatable.net</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
@@ -76,104 +76,101 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-9">
-                    <div class="row">
-                        <div class="col-4"></div>
-                        <div class="col-4"><!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                                +Add New Item
-                            </button>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">fill in the boxes</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <!-- Button trigger modal -->
+                    <div class="col-4">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            + ADD NEW ITEM
+                        </button>
 
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">ADD</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/addproducts" method="POST">
 
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1" class="form-label">ID</label>
-                                                    <input type="number" class="form-control"
-                                                        id="exampleInputPassword1">
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1" class="form-label">NAME</label>
-                                                    <input type="text" class="form-control" id="exampleInputPassword1">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1"
-                                                        class="form-label">Buying_price</label>
-                                                    <input type="number" class="form-control"
-                                                        id="exampleInputPassword1">
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1"
-                                                        class="form-label">Selling_price</label>
-                                                    <input type="number" class="form-control"
-                                                        id="exampleInputPassword1">
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1"
-                                                        class="form-label">Stock_quantity</label>
-                                                    <input type="number" class="form-control"
-                                                        id="exampleInputPassword1">
-                                                </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">name</label>
+                                                <input type="text" class="form-control" id="exampleInputPassword1"
+                                                    name="name">
+                                            </div>
 
 
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1"
+                                                    class="form-label">buying_price</label>
+                                                <input type="number" class="form-control" id="exampleInputPassword1"
+                                                    name="buying_price">
+                                            </div>
 
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Submit</button>
-                                        </div>
+
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1"
+                                                    class="form-label">selling_price</label>
+                                                <input type="number" class="form-control" id="exampleInputPassword1"
+                                                    name="selling_price">
+                                            </div>
+
+
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1"
+                                                    class="form-label">stock_quantity</label>
+                                                <input type="number" class="form-control" id="exampleInputPassword1"
+                                                    name="stock_quantity">
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                          
-                        </div>
                     </div>
-
-                    <table class="table" id="myTable">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">NAME</th>
-                                <th scope="col">Buying_price</th>
-                                <th scope="col">Selling_price</th>
-                                <th scope="col">Stock_quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for p in prods %}
-                            <tr>
-                                <th scope="row">{{ p[0] }}</th>
-                                <td>{{ p[1] }}</td>
-                                <td>{{ p[2] }}</td>
-                                <td>{{ p[3] }}</td>
-                                <td>{{ p[4] }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="col-4"></div>
                 </div>
+
+
+                <table class="table" id="myTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">NAME</th>
+                            <th scope="col">Buying_price</th>
+                            <th scope="col">Selling_price</th>
+                            <th scope="col">Stock_quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in prods %}
+                        <tr>
+                            <th scope="row">{{ p[0] }}</th>
+                            <td>{{ p[1] }}</td>
+                            <td>{{ p[2] }}</td>
+                            <td>{{ p[3] }}</td>
+                            <td>{{ p[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
