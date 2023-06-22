@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from pgfunc import fetch_data, insert_products
+from pgfunc import fetch_data, insert_sales, insert_products
 
 # Create an object called app
 # __name__ is used to tell Flask where to access HTML Files
@@ -20,6 +20,8 @@ def products():
 
    return render_template('products.html', prods=prods)
 
+
+
 @app.route('/addproducts', methods=["POST", "GET"])
 def addproducts():
    if request.method=="POST":
@@ -34,6 +36,25 @@ def addproducts():
       products=(name,buying_price,selling_price,stock_quantity)
       insert_products(products)
       return redirect("/products")
+   
+@app.route('/addsales', methods=["POST", "GET"])
+def addsales():
+   if request.method=="POST":
+      
+      pid= request.form["pid"]
+      quantity=request.form["quantity"]
+      
+
+      
+      print(pid)
+      print(quantity)
+      
+
+      sales=(pid,quantity,'now()')
+      insert_sales(sales)
+      return redirect("/sales")
+
+      
 
 
 @app.route("/sales")
