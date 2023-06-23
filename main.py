@@ -64,4 +64,4 @@ def sales():
 
    return render_template('sales.html', sales=sales)
 
-app.run()
+app.run(debug=True)
