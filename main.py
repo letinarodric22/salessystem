@@ -43,6 +43,7 @@ def addsales():
       
       pid= request.form["pid"]
       quantity=request.form["quantity"]
+
       
 
       
@@ -60,8 +61,9 @@ def addsales():
 @app.route("/sales")
 def sales():
    sales = fetch_data("sales")
+   prods= fetch_data("products")
 
 
-   return render_template('sales.html', sales=sales)
+   return render_template('sales.html', sales=sales, prods=prods)
 
 app.run(debug=True)
