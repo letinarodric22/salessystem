@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, sales_per_products
+# from flask_sqlalchemy import SQLAlchemy
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, sales_per_products, add_user
 import pygal
 from datetime import datetime, timedelta
 
@@ -16,11 +17,11 @@ app = Flask(__name__)
 def home():
     return render_template("index.html")
 
+
+
 @app.route("/products")
 def products():
    prods = fetch_data("products")
-
-
    return render_template('products.html', prods=prods)
 
 
@@ -40,20 +41,13 @@ def addproducts():
       insert_products(products)
       return redirect("/products")
    
+
+   
 @app.route('/addsales', methods=["POST", "GET"])
 def addsales():
    if request.method=="POST":
-      
       pid= request.form["pid"]
       quantity=request.form["quantity"]
-
-      
-
-      
-      print(pid)
-      print(quantity)
-      
-
       sales=(pid,quantity,'now()')
       insert_sales(sales)
       return redirect("/sales")
@@ -65,18 +59,13 @@ def addsales():
 def sales():
    sales = fetch_data("sales")
    prods= fetch_data("products")
-
-
    return render_template('sales.html', sales=sales, prods=prods)
 
 
 
 
 @app.route("/dashboard")
-def bar1():
-
-
-   
+def bar1():   
     bar_chart = pygal.Bar()
     bar_chart.title = 'sales per product'
     sale_product = sales_per_products()
@@ -104,10 +93,56 @@ def bar1():
 
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart)
 
+@app.route("/login") 
+def login():
+   return render_template('login.html')
 
-    
+@app.route("/register") 
+def register():
+   return render_template('register.html')
 
+
+
+@app.route('/signup', methods=["POST", "GET"])
+def adduser():
+   error1 = None
+   if request.method=="POST":
+      full_name= request.form["full_name"]
+      email=request.form["email"]
+      password=request.form["password"]
+      confirm_password=request.form["confirm_password"]
+      if password != confirm_password:
+         error1 = "password do not match! please enter again."
+         
+   users=(full_name,email,password,confirm_password,'now()')
+   add_user(users)
+   return render_template("register.html", error1=error1)
+   
+      
+         
+      
+   
 
    
+
+
+# @app.route('/login', methods=['POST'])
+# def login():
+#     # Get the login data from the request
+#     email = request.form.get('username')
+#     password = request.form.get('password')
+#     return render_template('login.html', email=email, password=password)
+
+   
+
+   #  if user:
+   #      # Return a success message if login is valid
+   #      return jsonify({'message': 'Login successful!'})
+   #  else:
+   #      # Return an error message if login is invalid
+   #      return jsonify({'message': 'Invalid login credentials'})
+
+
+    
 
 app.run(debug=True)

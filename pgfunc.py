@@ -48,6 +48,21 @@ def sales_per_products():
     return results
 
 
+def add_user(v):
+    vs = str(v)
+    q = "insert into users(full_name,email, password, confirm_password, created_at) "\
+        "values" + vs
+    cur.execute(q)
+    conn.commit()
+    return q
+
+
+
+
+    
+
+
+
 
 
 

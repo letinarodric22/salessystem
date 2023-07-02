@@ -9,59 +9,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    
-
-    <!-- <style>
-        
-           
-
+    <style>
+        body .image-section {
+            background-image: url("static/img4.jpg");
+            background-size: cover;
+            height: 900px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .container-fluid {
-            background-color: aqua;
+        body .navbar {
+            display: flex;
+            justify-content: center;
         }
 
-        .d-flex {
-            color: rgb(239, 14, 14);
+        nav h2 {
+            color: aqua;
+            font-family: "Helvetica Neue", Helvetica;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        #myTable {
-            background-color: green;
+        nav .navbar {
+            background-color: yellow;
         }
-        .container{
-            position: fixed;
-        }
-    </style> -->
+    </style>
+
 </head>
 
 <body>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">RODRI.LTD</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/products">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/sales">Sales</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/dashboard" >Dashboard</a>
-                        </li>
-                    </ul>
-                </div>
+
+
+    <!-- Navigation -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <h2>Letina Grocer</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sales">Sales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Nav
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                            <li><button class="dropdown-item" type="button">Inventories</button></li>
+                            <li><button class="dropdown-item" type="button">Sales</button></li>
+                            <li><button class="dropdown-item" type="button">Stock</button></li>
+                        </ul>
+                    </div>
             </div>
-        </nav>
-    </div>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+    <section class="image-section">
+        <!-- Content for Image Section -->
+        <h1>Welcome to the Image Section</h1>
+        <!-- Additional content -->
+    </section>
 
     {% block content %}
     {% endblock %}
