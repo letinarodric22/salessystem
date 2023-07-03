@@ -106,7 +106,7 @@ def register():
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
    error1 = None
-   if request.method=="GET":
+   if request.method=="POST":
       full_name= request.form["full_name"]
       email=request.form["email"]
       password=request.form["password"]
@@ -127,26 +127,23 @@ def adduser():
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
-    
+    error2 = None
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-
-        # Validate login credentials
-        # For demonstration purposes, we'll assume the login is successful
-        if email == "example@example.com" and password == "password":
-            redirect("/")
-        users=(email, password)
-        loginn(users)
-        # Call add_user() function to add the user upon successful login
-    else:
-        error2 = "Invalid email or password. Please try again."
-
-            
-        
-
-    return render_template("login.html", error2=error2)
-
+        user = loginn(email,password)
+        if user:
+          for i in user:
+                db_email = i[0]
+                db_password = i[1]
+          if db_password== password and db_email== email:
+             return redirect("/")
+          else:
+             error2 = "Invalid password or email. Please try again."
+            #  return render_template("login.html", error2)
+        else:
+            error2 = "Account not found. Please register first."
+    return render_template("login.html", error2=error2)   
    
 
     
