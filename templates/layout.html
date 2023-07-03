@@ -10,18 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <style>
-        body .image-section {
-            background-image: url("static/img4.jpg");
-            background-size: cover;
-            height: 900px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        
 
         body .navbar {
             display: flex;
             justify-content: center;
+            
         }
 
         nav h2 {
@@ -75,7 +69,7 @@
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Nav
+                            More
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
@@ -84,17 +78,17 @@
                             <li><button class="dropdown-item" type="button">Stock</button></li>
                         </ul>
                     </div>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact us</a>
+                    </li>
             </div>
             </ul>
         </div>
         </div>
     </nav>
 
-    <section class="image-section">
-        <!-- Content for Image Section -->
-        <h1>Welcome to the Image Section</h1>
-        <!-- Additional content -->
-    </section>
+   
 
     {% block content %}
     {% endblock %}

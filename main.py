@@ -93,9 +93,9 @@ def bar1():
 
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart)
 
-@app.route("/login") 
-def login():
-   return render_template('login.html')
+# @app.route("/login") 
+# def login():
+#    return render_template('login.html')
 
 @app.route("/register") 
 def register():
@@ -126,21 +126,31 @@ def adduser():
    
 
 
-# @app.route('/login', methods=['POST'])
-# def login():
-#     # Get the login data from the request
-#     email = request.form.get('username')
-#     password = request.form.get('password')
-#     return render_template('login.html', email=email, password=password)
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    
+    error_message=None
+    if request.method=="POST":
+       email = request.form.get('email')
+       password = request.form.get('password')
+       
+    
+       if users is None:
+         error_message = "Invalid email or password."
+       elif password != users[2]:
+         error_message = "Invalid email or password."
+       else:
+            # Successful login
+         return redirect('/dashboard')
+   
+       users=(email,password,'now()')
+       add_user(users)
+
+    return render_template("login.html", error_message=error_message)
 
    
 
-   #  if user:
-   #      # Return a success message if login is valid
-   #      return jsonify({'message': 'Login successful!'})
-   #  else:
-   #      # Return an error message if login is invalid
-   #      return jsonify({'message': 'Invalid login credentials'})
+    
 
 
     
