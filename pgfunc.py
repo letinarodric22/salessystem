@@ -57,6 +57,13 @@ def add_user(v):
     return q
 
 
+def loginn(email, password):
+     q="SELECT * FROM users WHERE email = %s"
+     cur.execute(q)
+     results =cur.fetchone()
+     return results
+
+
 
 
     

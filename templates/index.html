@@ -10,38 +10,44 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <style>
-body .image-section {
-    margin: 0;
-    padding: 0;
-    background-image: url("static/img5.jpeg");
-    background-size: cover;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    background-color: #f1f1f1;
-    background-blend-mode: color;
-    background-color: rgba(255, 0, 0, 0.5);
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-
+    body .image-section {
+        margin: 0;
+        padding: 0;
+        background-image: url("static/img5.jpeg");
+        background-size: cover;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        background-color: #f1f1f1;
+        background-blend-mode: color;
+        background-color: rgba(255, 0, 0, 0.5);
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    body a{text-decoration: none;}
 </style>
+
 <body>
 
     {% extends "layout.html" %}
     {% block content %}
+
+
     <section class="image-section">
-        <!-- Content for Image Section -->
-        <h1>The grocery store for everyone.<br>
-            Explore, find, and buy.<br>
-            Fill every day with groceries.</h1>
-            <a class="login" href="login.html">
-                <h6>login</h6>
-            </a>
-        
+        <div class="row">
+            <div col-3>
+                
+                <h1>The grocery store for everyone.<br>
+                    Explore, find, and buy.<br>
+                    Fill every day with groceries.</h1>
+            </div>
+            <div col-6> <a class="login" href="/login">
+                    <h5>login</h5>
+                </a></div>
+        </div>
     </section>
+
 
     <!-- Product Section -->
     <section class="py-5">
@@ -89,6 +95,32 @@ body .image-section {
         </div>
     </section>
 
-    <section></section>
+    <section>  <div class="container">
+        <div class="row">
+            <div class="col-md-6 right-section">
+            <h1 style="align-items: center;">Contact Us</h1>
+            <p style="color:green">It is a long established fact that a reader<br>
+                 will be distracted by the readable</p>
+        </div>
+        <div class="col-md-6 left-section">
+            <form style=" color: black;">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div></section>
+
+ 
     {% endblock %}
 </body>

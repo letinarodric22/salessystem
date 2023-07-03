@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 # from flask_sqlalchemy import SQLAlchemy
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, sales_per_products, add_user
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, sales_per_products, add_user, loginn
 import pygal
 from datetime import datetime, timedelta
 
@@ -106,7 +106,7 @@ def register():
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
    error1 = None
-   if request.method=="POST":
+   if request.method=="GET":
       full_name= request.form["full_name"]
       email=request.form["email"]
       password=request.form["password"]
@@ -125,28 +125,27 @@ def adduser():
 
    
 
-
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=["POST", "GET"])
 def login():
     
-    error_message=None
-    if request.method=="POST":
-       email = request.form.get('email')
-       password = request.form.get('password')
-       
-    
-       if users is None:
-         error_message = "Invalid email or password."
-       elif password != users[2]:
-         error_message = "Invalid email or password."
-       else:
-            # Successful login
-         return redirect('/dashboard')
-   
-       users=(email,password,'now()')
-       add_user(users)
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
 
-    return render_template("login.html", error_message=error_message)
+        # Validate login credentials
+        # For demonstration purposes, we'll assume the login is successful
+        if email == "example@example.com" and password == "password":
+            redirect("/")
+        users=(email, password)
+        loginn(users)
+        # Call add_user() function to add the user upon successful login
+    else:
+        error2 = "Invalid email or password. Please try again."
+
+            
+        
+
+    return render_template("login.html", error2=error2)
 
    
 
