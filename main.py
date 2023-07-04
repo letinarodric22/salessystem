@@ -15,6 +15,10 @@ app = Flask(__name__)
 # @ - a decorator(its in-built ) make something be static
 @app.route("/")
 def home():
+    return render_template("landing.html")
+
+@app.route("/index")
+def home1():
     return render_template("index.html")
 
 
@@ -111,6 +115,7 @@ def adduser():
       email=request.form["email"]
       password=request.form["password"]
       confirm_password=request.form["confirm_password"]
+      error1="account created successfully..back to login"
       if password != confirm_password:
          error1 = "password do not match! please enter again."
          
@@ -137,18 +142,14 @@ def login():
                 db_email = i[0]
                 db_password = i[1]
           if db_password== password and db_email== email:
-             return redirect("/")
+             return redirect("/login")
           else:
              error2 = "Invalid password or email. Please try again."
             #  return render_template("login.html", error2)
         else:
             error2 = "Account not found. Please register first."
-    return render_template("login.html", error2=error2)   
+    return render_template("index.html", error2=error2)   
    
-
-    
-
-
-    
+ 
 
 app.run(debug=True)
