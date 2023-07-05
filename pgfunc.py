@@ -25,10 +25,38 @@ def insert_products(v):
     return q
 
 
+# def update_products(v):
+#     vs = str(v)
+#     for product in vs:
+#     q = """
+#         UPDATE products
+#         SET name = '{name}', buying_price = {buying_price}, selling_price = {selling_price}
+#         WHERE product_id = {product_id}
+#     """ 
+#     .format(
+#         name=product['name'],
+#         price=product['buying_price'],
+#         buying_price=product['selling_price'],
+#         product_id=product['product_id']
+#     )
+#     cur.execute(q)
+#     conn.commit()
+#     return q
+
+
    
 def insert_sales(v):
     vs = str(v)
     q = "insert into sales(pid,quantity, created_at) "\
+        "values" + vs
+    cur.execute(q)
+    conn.commit()
+    return q
+
+   
+def insert_stock(v):
+    vs = str(v)
+    q = "insert into stock(pid,quantity, created_at) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
