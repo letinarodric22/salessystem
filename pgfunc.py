@@ -26,14 +26,12 @@ def insert_products(v):
 
 
 def update_products(vs):
-        print(vs)
         id = vs[0]
         name = vs[1]
         buying_price = vs[2]
         selling_price = vs[3]
-        
         q = "UPDATE products SET name = %s, buying_price = %s, selling_price = %s WHERE id = %s"
-        cur.execute(q, (name, buying_price, selling_price, id))
+        cur.execute(q, (id,name, buying_price, selling_price))
         conn.commit()
         return q
     
