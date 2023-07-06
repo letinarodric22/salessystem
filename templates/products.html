@@ -125,6 +125,12 @@
                                                 <form action="/editproduct" method="POST">
 
                                                     <div class="mb-3">
+                                                        <label for="name" class="form-label">id</label>
+                                                        <input type="hidden" class="form-control" id="id" name="id"
+                                                            value="{{ p[0] }}">
+                                                    </div>
+
+                                                    <div class="mb-3">
                                                         <label for="name" class="form-label">Name</label>
                                                         <input type="text" class="form-control" id="name" name="name"
                                                             value="{{ p[1] }}">

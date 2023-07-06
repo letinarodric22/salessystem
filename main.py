@@ -26,7 +26,6 @@ def home1():
 @app.route("/products")
 def products():
    prods = fetch_data("products")
-   print(prods)
    return render_template('products.html', prods=prods)
 
 
@@ -49,14 +48,15 @@ def addproducts():
 @app.route('/editproduct', methods=["POST", "GET"])
 def editproducts():
    if request.method=="POST":
+      id = request.form['id']
       name = request.form["name"]
       buying_price= request.form["buying_price"]
       selling_price=request.form["selling_price"]
       print(name)
       print(buying_price)
       print(selling_price)
-      products=(name,buying_price,selling_price)
-      update_products(products)
+      vs=(id,name,buying_price,selling_price)
+      update_products(vs)
       return redirect("/products")
    
 
