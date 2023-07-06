@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 # from flask_sqlalchemy import SQLAlchemy
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, sales_per_products, add_user, loginn, insert_stock
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, sales_per_products, add_user, loginn, insert_stock, update_products
 import pygal
 from datetime import datetime, timedelta
 
@@ -26,6 +26,7 @@ def home1():
 @app.route("/products")
 def products():
    prods = fetch_data("products")
+   print(prods)
    return render_template('products.html', prods=prods)
 
 
@@ -45,20 +46,18 @@ def addproducts():
       insert_products(products)
       return redirect("/products")
    
-# @app.route('/editproduct', methods=["POST", "GET"])
-# def addproducts():
-#    if request.method=="POST":
-#       name = request.form["name"]
-#       buying_price= request.form["buying_price"]
-#       selling_price=request.form["selling_price"]
-#       stock_quantity=request.form["stock_quantity"]
-#       print(name)
-#       print(buying_price)
-#       print(selling_price)
-#       print(stock_quantity)
-#       products=(name,buying_price,selling_price,stock_quantity)
-#       update_products(products)
-#       return redirect("/products")
+@app.route('/editproduct', methods=["POST", "GET"])
+def editproducts():
+   if request.method=="POST":
+      name = request.form["name"]
+      buying_price= request.form["buying_price"]
+      selling_price=request.form["selling_price"]
+      print(name)
+      print(buying_price)
+      print(selling_price)
+      products=(name,buying_price,selling_price)
+      update_products(products)
+      return redirect("/products")
    
 
    

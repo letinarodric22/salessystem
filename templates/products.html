@@ -106,54 +106,49 @@
                             <td>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#editModal" id="editModal">
-                                    Edit product for {{ p[1] }}
+                                    data-bs-target="#editModal{{ p[0] }}">
+                                    Edit product
                                 </button>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="editModalLabel">edit the product</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="/editproduct" method="POST">
-    
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1" class="form-label">name</label>
-                                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                                        name="name">
-                                                </div>
-    
-    
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1"
-                                                        class="form-label">buying_price</label>
-                                                    <input type="number" class="form-control" id="exampleInputPassword1"
-                                                        name="buying_price">
-                                                </div>
-    
-    
-                                                <div class="mb-3">
-                                                    <label for="exampleInputPassword1"
-                                                        class="form-label">selling_price</label>
-                                                    <input type="number" class="form-control" id="exampleInputPassword1"
-                                                        name="selling_price">
-                                                </div>
-    
-    
-                                               
-    
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </form>
+                                <div class="modal fade" id="editModal{{ p[0] }}" tabindex="-1"
+                                    aria-labelledby="editModalLabel{{ p[0] }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="editModalLabel{{ p[0] }}">Edit
+                                                    product {{ p[1] }}</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/editproduct" method="POST">
+
+                                                    <div class="mb-3">
+                                                        <label for="name" class="form-label">Name</label>
+                                                        <input type="text" class="form-control" id="name" name="name"
+                                                            value="{{ p[1] }}">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="buying_price" class="form-label">Buying
+                                                            Price</label>
+                                                        <input type="number" class="form-control" id="buying_price"
+                                                            name="buying_price" value="{{ p[2] }}">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="selling_price" class="form-label">Selling
+                                                            Price</label>
+                                                        <input type="number" class="form-control" id="selling_price"
+                                                            name="selling_price" value="{{ p[3] }}">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             </td>
                         </tr>
                         {% endfor %}

@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2, json
 
 
 try:
@@ -25,23 +25,18 @@ def insert_products(v):
     return q
 
 
-# def update_products(v):
-#     vs = str(v)
-#     for product in vs:
-#     q = """
-#         UPDATE products
-#         SET name = '{name}', buying_price = {buying_price}, selling_price = {selling_price}
-#         WHERE product_id = {product_id}
-#     """ 
-#     .format(
-#         name=product['name'],
-#         price=product['buying_price'],
-#         buying_price=product['selling_price'],
-#         product_id=product['product_id']
-#     )
-#     cur.execute(q)
-#     conn.commit()
-#     return q
+def update_products(vs):
+    
+    for product in vs:
+        q = "UPDATE products SET name = '{name}', buying_price = {buying_price}, selling_price = {selling_price} WHERE id = {id}"
+        .format(
+            product[1], product[2], product[3], product[0]
+        )
+             
+        cur.execute(q)
+        conn.commit()
+        return q
+    
 
 
    
