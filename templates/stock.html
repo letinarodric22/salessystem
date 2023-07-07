@@ -38,7 +38,7 @@
 
                             <form action="/addstock" method="POST">
 
-                                <!-- <label for="fname">product_id:</label><br> -->
+                                
                                 <select name="pid" id="product">
                                     <option value="">Select a product</option>
                                     {% for p in prods %}
@@ -47,8 +47,6 @@
                                   </select><br><br>
                                 <label for="lname">quantity:</label>
                                 <input type="text" id="lname" name="quantity"><br><br>
-
-
 
                                 <button type="submit" class="btn btn-primary">Submit</button><br>
                             </form>

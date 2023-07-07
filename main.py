@@ -26,6 +26,7 @@ def home1():
 @app.route("/products")
 def products():
    prods = fetch_data("products")
+   print(prods)
    return render_template('products.html', prods=prods)
 
 
@@ -45,6 +46,7 @@ def addproducts():
       insert_products(products)
       return redirect("/products")
    
+
 @app.route('/editproduct', methods=["POST", "GET"])
 def editproducts():
    if request.method=="POST":
@@ -86,6 +88,7 @@ def stock():
    stock = fetch_data("stock")
    prods= fetch_data("products")
    return render_template('stock.html', stock=stock, prods=prods)
+
 
 @app.route('/addstock', methods=["POST"])
 def addstock():
@@ -155,11 +158,7 @@ def adduser():
    return render_template("register.html", error1=error1)
    
       
-         
-      
-   
 
-   
 
 @app.route('/login', methods=["POST", "GET"])
 def login():

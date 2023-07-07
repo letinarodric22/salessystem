@@ -31,7 +31,7 @@ def update_products(vs):
         buying_price = vs[2]
         selling_price = vs[3]
         q = "UPDATE products SET name = %s, buying_price = %s, selling_price = %s WHERE id = %s"
-        cur.execute(q, (id,name, buying_price, selling_price))
+        cur.execute(q, (name, buying_price, selling_price,id))
         conn.commit()
         return q
     
