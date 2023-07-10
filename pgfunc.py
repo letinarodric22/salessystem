@@ -68,6 +68,11 @@ def sales_per_products():
     results = cur.fetchall()
     return results
 
+def remaining_stock():
+    q = " SELECT * FROM remaining_stock;"
+    cur.execute(q)
+    results = cur.fetchall()
+    return results
 
 def add_user(v):
     vs = str(v)

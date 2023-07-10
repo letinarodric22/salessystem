@@ -24,8 +24,16 @@
         background-blend-mode: color;
         background-color: rgba(255, 0, 0, 0.5);
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        text-shadow: 3px 3px grey;
     }
-    body a{text-decoration: none;}
+    body a{text-decoration: none;
+    box-sizing: border-box;}
+
+    body .image-section h1{
+        align-content:flex-start;
+    }
+
+
 </style>
 
 <body>
@@ -37,10 +45,12 @@
     <section class="image-section">
         <div class="row">
             <div col-3>
+                <h1>WELCOME TO OUR GROCERY</h1><br><br>
                 
-                <h1>The grocery store for everyone.<br>
+                <h2>The grocery store for everyone.<br>
                     Explore, find, and buy.<br>
-                    Fill every day with groceries.</h1>
+                    Fill every day with groceries.<br>
+                SAVE YOUR MONEY</h1>
             </div>
         </div>
     </section>
@@ -54,7 +64,7 @@
                     <div class="card">
                         <img src="static/img1.jpg" class="card-img-top" alt="Product 1">
                         <div class="card-body">
-                            <h5 class="card-title">Product 1</h5>
+                            <h5 class="card-title">Eggs</h5>
                             <p class="card-text">82% of your daily vitamin D requirements
                                 50% of your daily folate requirements
                                 25% of your daily riboflavin (Vitamin B2) requirements
@@ -67,7 +77,7 @@
                     <div class="card">
                         <img src="static/img2.jpg" class="card-img-top" alt="Product 2">
                         <div class="card-body">
-                            <h5 class="card-title">Product 2</h5>
+                            <h5 class="card-title">Banana</h5>
                             <p class="card-text">Bananas are incredibly healthy, convenient, delicious, and one of the
                                 most inexpensive fresh fruits you can buy. This makes them an excellent choice for
                                 anyone interested in eating healthy.</p>
@@ -79,7 +89,7 @@
                     <div class="card">
                         <img src="static/img3.jpg" class="card-img-top" alt="Product 3">
                         <div class="card-body">
-                            <h5 class="card-title">Product 3</h5>
+                            <h5 class="card-title">Drink</h5>
                             <p class="card-text">What are the common types of drinks?
                                 Common types of drinks include plain drinking water, milk, juice, smoothies and soft
                                 drinks. Traditionally warm beverages include coffee, tea, and hot chocolate. Caffeinated

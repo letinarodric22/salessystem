@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 # from flask_sqlalchemy import SQLAlchemy
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, sales_per_products, add_user, loginn, insert_stock, update_products
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock
 import pygal
 from datetime import datetime, timedelta
 
@@ -115,6 +115,7 @@ def bar1():
     bar_chart.x_labels = name1
     bar_chart.add('Sale1', sale1)
     bar_chart=bar_chart.render_data_uri()
+
    #  line graph for sales per day
     line_chart = pygal.Line()
     line_chart.title = 'Sales per Day'
@@ -128,7 +129,20 @@ def bar1():
     line_chart.add('Sales', sales)
     line_chart=line_chart.render_data_uri()
 
-    return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart)
+# remaining_stock
+    bar_chart1 = pygal.Bar()
+    bar_chart1.title = 'remaining stock'
+    remain_stock = remaining_stock()
+    name1 = []
+    stock = []
+    for j in remain_stock:
+       name1.append(j[0])
+       stock.append(j[1])
+    bar_chart1.x_labels = name1
+    bar_chart1.add('stock', stock)
+    bar_chart1=bar_chart1.render_data_uri()
+
+    return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1)
 
 # @app.route("/login") 
 # def login():
