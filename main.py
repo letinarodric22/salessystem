@@ -26,7 +26,6 @@ def home1():
 @app.route("/products")
 def products():
    prods = fetch_data("products")
-   print(prods)
    return render_template('products.html', prods=prods)
 
 
@@ -104,6 +103,7 @@ def addstock():
 
 @app.route("/dashboard")
 def bar1():   
+   #  bar graph for sales per product
     bar_chart = pygal.Bar()
     bar_chart.title = 'sales per product'
     sale_product = sales_per_products()
@@ -115,8 +115,7 @@ def bar1():
     bar_chart.x_labels = name1
     bar_chart.add('Sale1', sale1)
     bar_chart=bar_chart.render_data_uri()
-    
-
+   #  line graph for sales per day
     line_chart = pygal.Line()
     line_chart.title = 'Sales per Day'
     daily_sales = sales_per_day()
@@ -143,16 +142,17 @@ def register():
 
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
-   error1 = None
+   
    if request.method=="POST":
       full_name= request.form["full_name"]
       email=request.form["email"]
       password=request.form["password"]
       confirm_password=request.form["confirm_password"]
+      error1 = None
       error1="account created successfully..back to login"
       if password != confirm_password:
          error1 = "password do not match! please enter again."
-         
+
    users=(full_name,email,password,confirm_password,'now()')
    add_user(users)
    return render_template("register.html", error1=error1)
@@ -162,23 +162,25 @@ def adduser():
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
-    error2 = None
+    error = None
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        user = loginn(email,password)
-        if user:
-          for i in user:
-                db_email = i[0]
-                db_password = i[1]
-          if db_password== password and db_email== email:
-             return redirect("/login")
-          else:
-             error2 = "Invalid password or email. Please try again."
-            #  return render_template("login.html", error2)
+        users = loginn(email, password)
+
+        if users:
+            for user in users:
+                db_email = user[0]
+                db_password = user[1]
+
+                if db_email == email and db_password == password:
+                    return redirect("/index")
+            
+            error = "Invalid password or email. Please try again."
         else:
-            error2 = "Account not found. Please register first."
-    return render_template("index.html", error2=error2)   
+            error = "Account not found. Please register first."
+
+    return render_template("landing.html", error=error)  
    
  
 

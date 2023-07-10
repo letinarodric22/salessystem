@@ -24,62 +24,75 @@
 
 <body>
 
+    <div class="row">
+        <div col-md-6>
+            <section class="image-section">
+                <div class="row">
+                    <div col-3>
 
-    <section class="image-section">
-        <div class="row">
-            <div col-3>
-
-                <h1>The grocery store for everyone.<br>
-                    Explore, find, and buy.<br>
-                    Fill every day with groceries.</h1>
-            </div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Login
+                        <h1>The grocery store for everyone.<br>
+                            Explore, find, and buy.<br>
+                            Fill every day with groceries.</h1>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div col-6>
+            <section>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Login
                 </button>
 
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">grocer</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
+                <div>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">grocer</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h2>Login</h2>
-                                        <form method="POST" action="/login">
-                                            <div class="mb-3">
-                                                <label for="email" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" name="email"
-                                                    required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="password" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="password"
-                                                    name="password" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Login</button>
-                                        </form>
-                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h2>Login</h2>
+                                            <form method="POST" action="/login">
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                        required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="password" class="form-label">Password</label>
+                                                    <input type="password" class="form-control" id="password"
+                                                        name="password" required>
+                                                </div>
+                                                {% if error %}
+                                                <p>
+                                                <h4 style="color: red;">{{ error }}</h4>
+                                                </p>
+                                                {% endif %}
+                                                <button type="submit" class="btn btn-primary">Login</button>
+                                            </form>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <h2>Sign Up</h2>
-                                        <p>Don't have an account? Sign up now!</p>
-                                        <a href="/signup" class="btn btn-primary">Sign Up</a>
+                                        <div class="col-md-6">
+                                            <h2>Sign Up</h2>
+                                            <p>Don't have an account? Sign up now!</p>
+                                            <a href="/signup" class="btn btn-primary">Sign Up</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
+            </section>
         </div>
-    </section>
+    </div>
     <div class="container">
         <h1>Welcome to My Website</h1>
         <p>This is the landing page.</p>
