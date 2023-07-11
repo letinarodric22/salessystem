@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 # from flask_sqlalchemy import SQLAlchemy
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock, get_remaining_stock
 import pygal
 from datetime import datetime, timedelta
 
@@ -139,7 +139,6 @@ def bar1():
     bar_chart1.x_labels = name1
     bar_chart1.add('stock', stockk)
     bar_chart1=bar_chart1.render_data_uri()
-
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1)
 
 # @app.route("/login") 
@@ -187,18 +186,21 @@ def login():
 
                 if db_email == email and db_password == password:
                     return redirect("/index")
-            
+
             error = "Invalid password or email. Please try again."
         else:
             error = "Account not found. Please register first."
-
     return render_template("landing.html", error=error)  
 
 
 @app.context_processor
 def inject_remaining_stock():
-    remaining_stockk = remaining_stock()
-    return {'remaining_stock': remaining_stockk}
+    def get_stock_by_id(pid):
+       return [(id, stock) for id, stock in remaining_stock if id == pid]
+    return {"get_stock_by_id":get_stock_by_id}
+  
+
+
    
  
 

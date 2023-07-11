@@ -74,6 +74,12 @@ def remaining_stock():
     results = cur.fetchall()
     return results
 
+def get_remaining_stock():
+    q = " SELECT * FROM get_remaining_stock;"
+    cur.execute(q)
+    results = cur.fetchall()
+    return results
+
 def add_user(v):
     vs = str(v)
     q = "insert into users(full_name,email, password, confirm_password, created_at) "\
@@ -88,6 +94,8 @@ def loginn(email, password):
      cur.execute(q)
      results =cur.fetchall()
      return results
+
+
 
 
 
