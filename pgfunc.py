@@ -18,7 +18,7 @@ def fetch_data(tbname):
     
 def insert_products(v):
     vs = str(v)
-    q = "insert into products(name,buying_price,selling_price,stock_quantity) "\
+    q = "insert into products(name,buying_price,selling_price) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
@@ -49,7 +49,7 @@ def insert_sales(v):
    
 def insert_stock(v):
     vs = str(v)
-    q = "insert into stock(pid,quantity, created_at) "\
+    q = "insert into stockk(pid,quantity, created_at) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
@@ -88,6 +88,8 @@ def loginn(email, password):
      cur.execute(q)
      results =cur.fetchall()
      return results
+
+
 
 
 

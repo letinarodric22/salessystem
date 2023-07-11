@@ -36,12 +36,10 @@ def addproducts():
       name = request.form["name"]
       buying_price= request.form["buying_price"]
       selling_price=request.form["selling_price"]
-      stock_quantity=request.form["stock_quantity"]
       print(name)
       print(buying_price)
       print(selling_price)
-      print(stock_quantity)
-      products=(name,buying_price,selling_price,stock_quantity)
+      products=(name,buying_price,selling_price)
       insert_products(products)
       return redirect("/products")
    
@@ -82,11 +80,11 @@ def sales():
 
 
 
-@app.route("/stock")
-def stock():
-   stock = fetch_data("stock")
+@app.route("/stockk")
+def stockk():
+   stockk = fetch_data("stockk")
    prods= fetch_data("products")
-   return render_template('stock.html', stock=stock, prods=prods)
+   return render_template('stock.html', stockk=stockk, prods=prods)
 
 
 @app.route('/addstock', methods=["POST"])
@@ -94,9 +92,9 @@ def addstock():
    if request.method=="POST":
       pid= request.form["pid"]
       quantity=request.form["quantity"]
-      stock=(pid,quantity,'now()')
-      insert_stock(stock)
-      return redirect("/stock")
+      stockk=(pid,quantity,'now()')
+      insert_stock(stockk)
+      return redirect("/stockk")
 
 
 
@@ -134,12 +132,12 @@ def bar1():
     bar_chart1.title = 'remaining stock'
     remain_stock = remaining_stock()
     name1 = []
-    stock = []
+    stockk = []
     for j in remain_stock:
-       name1.append(j[0])
-       stock.append(j[1])
+       name1.append(j[1])
+       stockk.append(j[2])
     bar_chart1.x_labels = name1
-    bar_chart1.add('stock', stock)
+    bar_chart1.add('stock', stockk)
     bar_chart1=bar_chart1.render_data_uri()
 
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1)
@@ -195,6 +193,12 @@ def login():
             error = "Account not found. Please register first."
 
     return render_template("landing.html", error=error)  
+
+
+@app.context_processor
+def inject_remaining_stock():
+    remaining_stockk = remaining_stock()
+    return {'remaining_stock': remaining_stockk}
    
  
 
