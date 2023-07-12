@@ -102,20 +102,7 @@
                             <td>{{ p[1] }}</td>
                             <td>{{ p[2] }}</td>
                             <td>{{ p[3] }}</td>
-                            <td>  {% for id in remaining_stock %}
-                                {% set stock_data = get_stock_by_id(pid) %}
-                                {% if stock_data %}
-                                    <tr>
-                                        <td>
-                                            <ul>
-                                                {% for stock in stock_data %}
-                                                    <li>{{ stock[1] }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}</td>
+                            <td>{{ remaining_stock }}</td>
                             <td>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"

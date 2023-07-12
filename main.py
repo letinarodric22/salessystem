@@ -186,19 +186,18 @@ def login():
 
                 if db_email == email and db_password == password:
                     return redirect("/index")
-
+            
             error = "Invalid password or email. Please try again."
         else:
             error = "Account not found. Please register first."
+
     return render_template("landing.html", error=error)  
 
 
 @app.context_processor
 def inject_remaining_stock():
-    def get_stock_by_id(pid):
-       return [(id, stock) for id, stock in remaining_stock if id == pid]
-    return {"get_stock_by_id":get_stock_by_id}
-  
+    remaining_stock = get_remaining_stock()
+    return {'remaining_stock': remaining_stock}
 
 
    
