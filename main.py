@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 # from flask_sqlalchemy import SQLAlchemy
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock, get_remaining_stock
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock
 import pygal
 from datetime import datetime, timedelta
 
@@ -36,9 +36,6 @@ def addproducts():
       name = request.form["name"]
       buying_price= request.form["buying_price"]
       selling_price=request.form["selling_price"]
-      print(name)
-      print(buying_price)
-      print(selling_price)
       products=(name,buying_price,selling_price)
       insert_products(products)
       return redirect("/products")
@@ -111,7 +108,7 @@ def bar1():
        name1.append(j[0])
        sale1.append(j[1])
     bar_chart.x_labels = name1
-    bar_chart.add('Sale1', sale1)
+    bar_chart.add('Sale', sale1)
     bar_chart=bar_chart.render_data_uri()
 
    #  line graph for sales per day
@@ -196,8 +193,8 @@ def login():
 
 @app.context_processor
 def inject_remaining_stock():
-    remaining_stock = get_remaining_stock()
-    return {'remaining_stock': remaining_stock}
+    remainin_stock = remaining_stock()
+    return {'remaining_stock': remainin_stock}
 
 
    

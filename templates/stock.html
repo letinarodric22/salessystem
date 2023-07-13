@@ -67,7 +67,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Product ID</th>
+                            <th>Product name</th>
                             <th>Quantity</th>
                             <th>Created At</th>
                         </tr>
@@ -76,7 +76,13 @@
                         {% for st in stockk %}
                         <tr>
                             <td>{{ st[0] }}</td>
-                            <td>{{ st[1] }}</td>
+                            <td name="pid" id="product">
+                                {% for p in prods %}
+                                    {% if p[0] == st[1] %}
+                                        {{ p[1] }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
                             <td>{{ st[2] }}</td>
                             <td>{{ st[3] }}</td>
                         </tr>

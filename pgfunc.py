@@ -75,7 +75,12 @@ def remaining_stock():
     return results
 
 def get_remaining_stock():
-    q = " SELECT * FROM get_remaining_stock;"
+    q = """ SELECT sd.quantity - COALESCE(sum(sa.quantity), 0::bigint) AS remaining_stock
+       FROM products p
+       JOIN stock_duka sd ON p.id = sd.pid
+       LEFT JOIN sales sa ON p.id = sa.pid
+       WHERE p.id = sd.pid
+       GROUP BY p.id, sd.quantity"""
     cur.execute(q)
     results = cur.fetchall()
     return results

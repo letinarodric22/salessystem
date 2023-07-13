@@ -6,21 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>sales table</title>
 </head>
-{% extends 'layout.html'  %}
+{% extends 'layout.html' %}
+
 <body>
     {% block content %}
 
-   
+
     <div class="row">
         <div class="col-6">
             <ul>
 
             </ul>
-           
+
 
         </div>
 
-        
+
         <div class="col-6">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -44,9 +45,9 @@
                                 <select name="pid" id="product">
                                     <option value="">Select a product</option>
                                     {% for p in prods %}
-                                      <option value="{{ p[0] }}">{{ p[1] }}</option>
+                                    <option value="{{ p[0] }}">{{ p[1] }}</option>
                                     {% endfor %}
-                                  </select><br><br>
+                                </select><br><br>
                                 <label for="lname">quantity:</label>
                                 <input type="text" id="lname" name="quantity"><br><br>
 
@@ -72,7 +73,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Product ID</th>
+                            <th>Product name</th>
                             <th>Quantity</th>
                             <th>Created At</th>
                         </tr>
@@ -81,7 +82,13 @@
                         {% for sale in sales %}
                         <tr>
                             <td>{{ sale[0] }}</td>
-                            <td>{{ sale[1] }}</td>
+                            <td name="pid">
+                                {% for p in prods %}
+                                    {% if p[0] == sale[1] %}
+                                        {{ p[1] }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
                             <td>{{ sale[2] }}</td>
                             <td>{{ sale[3] }}</td>
                         </tr>
@@ -94,16 +101,16 @@
 
     </div>
 
-    
-
-{% endblock %}
 
 
+    {% endblock %}
 
 
 
 
-        
+
+
+
 
 </body>
 

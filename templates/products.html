@@ -66,12 +66,12 @@
                                             </div>
 
 
-                                            <div class="mb-3">
+                                            <!-- <div class="mb-3">
                                                 <label for="exampleInputPassword1"
                                                     class="form-label">stock_quantity</label>
                                                 <input type="number" class="form-control" id="exampleInputPassword1"
                                                     name="stock_quantity">
-                                            </div>
+                                            </div> -->
 
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </form>
@@ -103,6 +103,13 @@
                             <td>{{ p[2] }}</td>
                             <td>{{ p[3] }}</td>
                             <td>{{ remaining_stock }}</td>
+                            <!-- <td name="pid" id="product">
+                                {% for r in remaining_stock %}
+                                    {% if r[2] == p[0] %}
+                                        {{ r[2] }}
+                                    {% endif %}
+                                {% endfor %} 
+                            </td> -->
                             <td>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
