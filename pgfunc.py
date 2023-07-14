@@ -7,6 +7,7 @@ try:
 except Exception as e:
     print(e)    
 
+
 def fetch_data(tbname):
     try:
         q = "SELECT * FROM " + tbname + ";"
@@ -15,7 +16,8 @@ def fetch_data(tbname):
         return records 
     except Exception as e:
         return e
-    
+
+
 def insert_products(v):
     vs = str(v)
     q = "insert into products(name,buying_price,selling_price) "\
@@ -35,8 +37,6 @@ def update_products(vs):
         conn.commit()
         return q
     
-
-
    
 def insert_sales(v):
     vs = str(v)
@@ -62,11 +62,13 @@ def sales_per_day():
     results =cur.fetchall()
     return results
 
+
 def sales_per_products():
     q = " SELECT * FROM sales_per_product;"
     cur.execute(q)
     results = cur.fetchall()
     return results
+
 
 def remaining_stock():
     q = " SELECT * FROM remaining_stock;"
@@ -74,16 +76,18 @@ def remaining_stock():
     results = cur.fetchall()
     return results
 
-def get_remaining_stock():
-    q = """ SELECT sd.quantity - COALESCE(sum(sa.quantity), 0::bigint) AS remaining_stock
-       FROM products p
-       JOIN stock_duka sd ON p.id = sd.pid
-       LEFT JOIN sales sa ON p.id = sa.pid
-       WHERE p.id = sd.pid
-       GROUP BY p.id, sd.quantity"""
-    cur.execute(q)
+
+def get_remaining_stock(product_id=None):
+    q = """ SELECT st.quantity - COALESCE(sum(sa.quantity), 0::bigint) AS remaining_stock
+     FROM products p
+     JOIN stockk st ON p.id = st.pid
+     LEFT JOIN sales sa ON p.id = sa.pid
+     WHERE p.id = %s
+    GROUP BY st.quantity;"""
+    cur.execute(q,(product_id,))
     results = cur.fetchall()
     return results
+
 
 def add_user(v):
     vs = str(v)

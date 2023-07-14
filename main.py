@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 # from flask_sqlalchemy import SQLAlchemy
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock
 import pygal
 from datetime import datetime, timedelta
 
@@ -113,7 +113,7 @@ def bar1():
 
    #  line graph for sales per day
     line_chart = pygal.Line()
-    line_chart.title = 'Sales per Day'
+    line_chart.title = 'Sales per Month'
     daily_sales = sales_per_day()
     dates = []
     sales = []
@@ -150,7 +150,6 @@ def register():
 
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
-   
    if request.method=="POST":
       full_name= request.form["full_name"]
       email=request.form["email"]
@@ -160,7 +159,6 @@ def adduser():
       error1="account created successfully..back to login"
       if password != confirm_password:
          error1 = "password do not match! please enter again."
-
    users=(full_name,email,password,confirm_password,'now()')
    add_user(users)
    return render_template("register.html", error1=error1)
@@ -175,7 +173,6 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         users = loginn(email, password)
-
         if users:
             for user in users:
                 db_email = user[0]
@@ -183,18 +180,17 @@ def login():
 
                 if db_email == email and db_password == password:
                     return redirect("/index")
-            
             error = "Invalid password or email. Please try again."
         else:
             error = "Account not found. Please register first."
-
     return render_template("landing.html", error=error)  
 
 
 @app.context_processor
 def inject_remaining_stock():
-    remainin_stock = remaining_stock()
-    return {'remaining_stock': remainin_stock}
+    def remaining_stock(product_id=None):
+        return get_remaining_stock(product_id)
+    return {'remaining_stock': remaining_stock}
 
 
    
