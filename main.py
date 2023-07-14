@@ -188,9 +188,10 @@ def login():
 
 @app.context_processor
 def inject_remaining_stock():
-    def remaining_stock(product_id=None):
-        return get_remaining_stock(product_id)
-    return {'remaining_stock': remaining_stock}
+    def remain_stock(product_id=None):
+      stock = get_remaining_stock(product_id)
+      return stock[0] if stock is not None else '0'
+    return {'remain_stock': remain_stock}
 
 
    

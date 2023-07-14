@@ -84,9 +84,13 @@ def get_remaining_stock(product_id=None):
      LEFT JOIN sales sa ON p.id = sa.pid
      WHERE p.id = %s
     GROUP BY st.quantity;"""
-    cur.execute(q,(product_id,))
+    cur.execute(q, (product_id,))
     results = cur.fetchall()
-    return results
+    if results:
+        return results[0]
+    else:
+        return None
+    
 
 
 def add_user(v):
