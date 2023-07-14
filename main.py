@@ -111,7 +111,7 @@ def bar1():
     bar_chart.add('Sale', sale1)
     bar_chart=bar_chart.render_data_uri()
 
-   #  line graph for sales per day
+   #  line graph for sales per month
     line_chart = pygal.Line()
     line_chart.title = 'Sales per Month'
     daily_sales = sales_per_day()
@@ -190,7 +190,7 @@ def login():
 def inject_remaining_stock():
     def remain_stock(product_id=None):
       stock = get_remaining_stock(product_id)
-      return stock[0] if stock is not None else '0'
+      return stock[0] if stock is not None else int('0')
     return {'remain_stock': remain_stock}
 
 
