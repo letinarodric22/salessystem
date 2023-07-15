@@ -9,38 +9,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <style>
-        
+    <link rel="stylesheet" href="static/styles.css">
 
-        body .navbar {
-            display: flex;
-            justify-content: center;
-            
-        }
-
-        nav h2 {
-            color: aqua;
-            font-family: "Helvetica Neue", Helvetica;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        nav .navbar {
-            background-color: yellow;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/brands.min.css">
 
 </head>
 
 <body>
-
-
     <!-- Navigation -->
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <h2>RS Grocer</h2>
+            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                <h3>RS-Grocer</h3>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +67,7 @@
         </div>
         </div>
     </nav>
+    
 
     
 

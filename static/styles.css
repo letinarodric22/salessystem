@@ -1,0 +1,20 @@
+body .navbar {
+    display: flex;
+    justify-content: center;
+    background-color: blueviolet;
+
+}
+nav h3 {
+    color: #fbff2b;
+    font-family:Arial, sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+    font-size: 18px;
+}
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ff00bf;
+    font-size: 20px;
+}
