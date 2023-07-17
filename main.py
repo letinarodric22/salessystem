@@ -17,6 +17,7 @@ app = Flask(__name__)
 def home():
     return render_template("landing.html")
 
+
 @app.route("/index")
 def home1():
     return render_template("index.html")
@@ -183,14 +184,14 @@ def login():
             error = "Invalid password or email. Please try again."
         else:
             error = "Account not found. Please register first."
-    return render_template("landing.html", error=error)  
+    return render_template("index.html", error=error)  
 
 
 @app.context_processor
 def inject_remaining_stock():
     def remain_stock(product_id=None):
       stock = get_remaining_stock(product_id)
-      return stock[0] if stock is not None else int('0')
+      return stock[0] if stock is not None else int("0")
     return {'remain_stock': remain_stock}
 
 

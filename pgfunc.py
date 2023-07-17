@@ -78,7 +78,7 @@ def remaining_stock():
 
 
 def get_remaining_stock(product_id=None):
-    q = """SELECT SUM(st.quantity) - COALESCE(SUM(sa.quantity), 0) AS remaining_stock
+    q = """SELECT SUM(st.quantity) - SUM(sa.quantity) AS remaining_stock
            FROM products p
            JOIN stockk st ON p.id = st.pid
            LEFT JOIN sales sa ON p.id = sa.pid

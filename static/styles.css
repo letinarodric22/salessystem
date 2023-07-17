@@ -20,6 +20,10 @@ nav h3 {
     text-transform: uppercase;
 
 }
+.icon {
+    font-size: 24px; /* Change the font size to enlarge the icon */
+    margin-left: 0px; /* Add a margin-left of 2px */
+}
 
 .navbar-dark .navbar-nav .nav-link {
     color: white;
@@ -33,6 +37,7 @@ nav h3 {
 .navbar-dark .navbar-nav .nav-link:hover {
     font-size: 20px;
     box-shadow: inset 200px 0 0 0 red;
+    border-radius: 7px;
 }
 .navbar.bg-purple {
     background-color: purple;
@@ -40,4 +45,42 @@ nav h3 {
 
 footer.bg-purple {
     background-color: purple;
+}
+
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav.ml-auto {
+    margin-left: auto;
+}
+
+.nav-item {
+    margin-right: 10px;
+}
+
+.contact-us {
+    margin-right: 0;
+}
+footer .quicks{
+    position: relative;
+    list-style: none;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+footer li:hover{
+    font-size: 20px;
+    box-shadow: inset 10px 10px 10px 10px  red;
+    border-radius: 7px;
+}
+
+
+footer li::before{
+    content: "> ";
+    color: lightblue; /* Change the color of the > symbol to red */
+    position: absolute; /* Position the ::before content */
+    left: -5px;
 }

@@ -26,14 +26,15 @@
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         text-shadow: 3px 3px grey;
     }
-    body a{text-decoration: none;
-    box-sizing: border-box;}
 
-    body .image-section h1{
-        align-content:flex-start;
+    body a {
+        text-decoration: none;
+        box-sizing: border-box;
     }
 
-
+    body .image-section h1 {
+        align-content: flex-start;
+    }
 </style>
 
 <body>
@@ -46,11 +47,11 @@
         <div class="row">
             <div col-3>
                 <h1>WELCOME TO OUR GROCERY</h1><br><br>
-                
+
                 <h2>The grocery store for everyone.<br>
                     Explore, find, and buy.<br>
                     Fill every day with groceries.<br>
-                SAVE YOUR MONEY</h1>
+                    SAVE YOUR MONEY</h1>
             </div>
         </div>
     </section>
@@ -102,32 +103,34 @@
         </div>
     </section>
 
-    <section>  <div class="container">
-        <div class="row">
-            <div class="col-md-6 right-section">
-            <h1 style="align-items: center;">Contact Us</h1>
-            <p style="color:green">It is a long established fact that a reader<br>
-                 will be distracted by the readable</p>
-        </div>
-        <div class="col-md-6 left-section">
-            <form style=" color: black;">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" required>
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 right-section">
+                    <h1 style="align-items: center;">Contact Us</h1>
+                    <p style="color:green">It is a long established fact that a reader<br>
+                        will be distracted by the readable</p>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" required>
+                <div class="col-md-6 left-section">
+                    <form style=" color: black;">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-    </div></section>
+            </div>
+    </section>
 
- 
+
     {% endblock %}
 </body>
