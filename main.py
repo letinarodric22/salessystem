@@ -178,7 +178,6 @@ def login():
             for user in users:
                 db_email = user[0]
                 db_password = user[1]
-
                 if db_email == email and db_password == password:
                     return redirect("/index")
             error = "Invalid password or email. Please try again."
@@ -196,6 +195,4 @@ def inject_remaining_stock():
 
 
    
- 
-
 app.run(debug=True)

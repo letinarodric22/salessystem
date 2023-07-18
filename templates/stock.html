@@ -39,7 +39,7 @@
                             <form action="/addstock" method="POST">
 
                                 <select name="pid" id="product">
-                                    <option value="">Select a product</option>
+                                    <option value="" contenteditable="true">Select a product</option>
                                     {% for p in prods %}
                                       <option value="{{ p[0] }}">{{ p[1] }}</option>
                                     {% endfor %}

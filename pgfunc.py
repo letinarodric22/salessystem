@@ -92,7 +92,6 @@ def get_remaining_stock(product_id=None):
         return None
     
 
-
 def add_user(v):
     vs = str(v)
     q = "insert into users(full_name,email, password, confirm_password, created_at) "\
