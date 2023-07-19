@@ -1,4 +1,5 @@
 import psycopg2, json
+# psycopg2 is a popular Python adapter for PostgreSQL that allows you to interact with PostgreSQL databases using Python code
 
 
 try:

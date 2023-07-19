@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 # Create an object called app
 # __name__ is used to tell Flask where to access HTML Files
-# All HTML files are put inside "templates" folder
+# All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
 # All CSS/JS/ Images are put inside "static" folder
 app = Flask(__name__)
 
