@@ -79,12 +79,15 @@ def remaining_stock():
 
 
 def get_remaining_stock(product_id=None):
-    q = """SELECT SUM(st.quantity) - SUM(sa.quantity) AS remaining_stock
-           FROM products p
-           JOIN stockk st ON p.id = st.pid
-           LEFT JOIN sales sa ON p.id = sa.pid
-           WHERE p.id = %s
-           GROUP BY p.id;"""
+    q = """ SELECT 
+            COALESCE(st.stock_quantity, 0) - COALESCE(sa.sales_quantity, 0) AS closing_stock
+            FROM
+                (SELECT pid, SUM(quantity) AS stock_quantity FROM stockk GROUP BY pid) AS st
+            LEFT JOIN
+                (SELECT pid, SUM(quantity) AS sales_quantity FROM sales GROUP BY pid) AS sa
+            ON st.pid = sa.pid
+            WHERE st.pid = %s
+            GROUP BY st.stock_quantity,sa.sales_quantity;"""
     cur.execute(q, (product_id,))
     results = cur.fetchall()
     if results:
