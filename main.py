@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect
-# from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, redirect,session,logging,flash
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import scoped_session, sessionmaker
 from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock
 import pygal
 from datetime import datetime, timedelta
@@ -152,9 +153,9 @@ def register():
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
    if request.method=="POST":
-      full_name= request.form["full_name"]
-      email=request.form["email"]
-      password=request.form["password"]
+      full_name = request.form["full_name"]
+      email = request.form["email"]
+      password  = request.form["password"]
       confirm_password=request.form["confirm_password"]
       error1 = None
       error1="account created successfully..back to login"
@@ -165,7 +166,6 @@ def adduser():
    return render_template("register.html", error1=error1)
    
       
-
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
@@ -183,7 +183,7 @@ def login():
             error = "Invalid password or email. Please try again."
         else:
             error = "Account not found. Please register first."
-    return render_template("index.html", error=error)  
+    return render_template("login.html", error=error)  
 
 
 @app.context_processor

@@ -104,10 +104,10 @@
                         {% if remain_stock(p[0]) | int < 20 %} <td style="background-color: red;">{{
                             remain_stock(p[0])
                             }}</td>
-                            {% elif remain_stock(p[0]) | int < 50 %} <td style="background-color: yellow;">{{
+                            {% elif remain_stock(p[0]) | int < 70 %} <td style="background-color: yellow;">{{
                                 remain_stock(p[0]) }}</td>
                                 {% else %}
-                                <td style="background-color: white;">{{ remain_stock(p[0]) }}</td>
+                                <td style="background-color: green;">{{ remain_stock(p[0]) }}</td>
                                 {% endif %}
 
                                 <td>
