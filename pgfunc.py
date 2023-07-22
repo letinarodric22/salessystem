@@ -96,6 +96,16 @@ def get_remaining_stock(product_id=None):
         return None
     
 
+def get_pid(product_id=None):
+    q = "SELECT id FROM products;"
+    cur.execute(q, (product_id,))
+    results = cur.fetchall()
+    if results:
+        return results[0]
+    else:
+        return None   
+    
+
 def add_user(v):
     vs = str(v)
     q = "insert into users(full_name,email, password, confirm_password, created_at) "\

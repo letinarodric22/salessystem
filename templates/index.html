@@ -35,13 +35,23 @@
     body .image-section h1 {
         align-content: flex-start;
     }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .top,
+    .bottom {
+        height: 100vh;
+    }
 </style>
 
 <body>
-
+    <!--  
+    <div class="top"><a href="#bottom">top</a></div>
+    <div class="bottom" id="bottom">bottom</div> -->
     {% extends "layout.html" %}
     {% block content %}
-
 
     <section class="image-section">
         <div class="row">
@@ -130,6 +140,7 @@
                 </div>
             </div>
     </section>
+
 
 
     {% endblock %}

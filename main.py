@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request, redirect,session,logging,flash
+from flask import Flask, render_template, request, redirect,session,logging,flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock,get_pid
 import pygal
-from datetime import datetime, timedelta
+import barcode
+from barcode import Code128
+from barcode.writer import ImageWriter
+import base64
+import io
 
 
 # Create an object called app
@@ -144,10 +148,22 @@ def bar1():
 # def login():
 #    return render_template('login.html')
 
+@app.context_processor
+def inject_remaining_stock():
+     def generate_barcode(product_id=None):
+       data = get_pid("products")
+       data = Code128(product_id)
+       data.save("barcode")
+       generate_barcode(data) 
+       return data[0] if data is not None else int("0")
+     return {'generate_barcode': generate_barcode}
+
+
+
+
 @app.route("/register") 
 def register():
    return render_template('register.html')
-
 
 
 @app.route('/signup', methods=["POST", "GET"])
@@ -192,6 +208,7 @@ def inject_remaining_stock():
       stock = get_remaining_stock(product_id)
       return stock[0] if stock is not None else int("0")
     return {'remain_stock': remain_stock}
+
 
 
    

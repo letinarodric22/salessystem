@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>products datatable.net</title>
 
-    
+
 
 </head>
 
@@ -89,8 +89,10 @@
                             <th scope="col" style="padding-left: 7%;">NAME</th>
                             <th scope="col">Buying_price</th>
                             <th scope="col">Selling_price</th>
+                            <th scope="col">BarCode</th>
                             <th scope="col">Remaining_stock</th>
                             <th scope="col">Edit</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +103,8 @@
                         <td>{{ p[1] }}</td>
                         <td>{{ p[2] }}</td>
                         <td>{{ p[3] }}</td>
-                        {% if remain_stock(p[0]) | int < 20 %} <td style="background-color: red;">{{
+                        <td>{{ generate_barcode(p[0]) }}</td>
+                        {% if remain_stock(p[0]) | int < 20 %} <td style="background-color: pink;">{{
                             remain_stock(p[0])
                             }}</td>
                             {% elif remain_stock(p[0]) | int < 70 %} <td style="background-color: yellow;">{{
@@ -109,6 +112,7 @@
                                 {% else %}
                                 <td style="background-color: green;">{{ remain_stock(p[0]) }}</td>
                                 {% endif %}
+
 
                                 <td>
                                     <!-- Button trigger modal -->
