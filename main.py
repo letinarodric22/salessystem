@@ -4,7 +4,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock,get_pid
 import pygal
 import barcode
-from barcode import Code128
+from barcode import EAN13
 from barcode.writer import ImageWriter
 import base64
 import io
@@ -148,18 +148,6 @@ def bar1():
 # def login():
 #    return render_template('login.html')
 
-@app.context_processor
-def inject_remaining_stock():
-     def generate_barcode(product_id=None):
-       data = get_pid("products")
-       data = Code128(product_id)
-       data.save("barcode")
-       generate_barcode(data) 
-       return data[0] if data is not None else int("0")
-     return {'generate_barcode': generate_barcode}
-
-
-
 
 @app.route("/register") 
 def register():
@@ -210,6 +198,24 @@ def inject_remaining_stock():
     return {'remain_stock': remain_stock}
 
 
+
+
+def generate_barcode(data):
+    barcode_data = "12345678123"
+    EAN = get_pid('ean13')
+    code = EAN(data, writer=ImageWriter(), add_checksum=False)
+
+    # Render the barcode as an image and convert it to a Base64 data URI
+    buffer = io.BytesIO()
+    code.write(buffer)
+    buffer.seek(0)
+    barcode_data = base64.b64encode(buffer.read()).decode('utf-8')
+    barcode_uri = 'data:image/png;base64,' + barcode_data
+    return barcode_uri
+
+@app.context_processor
+def inject_barcode():
+   return {'generate_barcode': generate_barcode}
 
    
 app.run(debug=True)
