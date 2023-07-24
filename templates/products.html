@@ -104,7 +104,7 @@
                         <td>{{ p[2] }}</td>
                         <td>{{ p[3] }}</td>
                         <td>
-                            <img src="{{ generate_barcode(p[0]) }}" alt="Barcode">
+                         <img src="{{ generate_barcode(p[0]) }}" alt="Barcode">
                         </td>
                         {% if remain_stock(p[0]) | int < 20 %} <td style="background-color: pink;">{{
                             remain_stock(p[0])

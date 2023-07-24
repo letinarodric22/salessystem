@@ -6,8 +6,7 @@ import pygal
 import barcode
 from barcode import EAN13
 from barcode.writer import ImageWriter
-import base64
-import io
+
 
 
 # Create an object called app
@@ -15,6 +14,7 @@ import io
 # All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
 # All CSS/JS/ Images are put inside "static" folder
 app = Flask(__name__)
+
 
 # a route is an extension of url which loads you a html page
 # @ - a decorator(its in-built ) make something be static
@@ -201,17 +201,17 @@ def inject_remaining_stock():
 
 
 def generate_barcode(data):
-    barcode_data = "12345678123"
-    EAN = get_pid('ean13')
-    code = EAN(data, writer=ImageWriter(), add_checksum=False)
+    number = "123456781237"
+    My_code=EAN13(number)
+    My_code.save("new_code.svg")
 
     # Render the barcode as an image and convert it to a Base64 data URI
-    buffer = io.BytesIO()
-    code.write(buffer)
-    buffer.seek(0)
-    barcode_data = base64.b64encode(buffer.read()).decode('utf-8')
-    barcode_uri = 'data:image/png;base64,' + barcode_data
-    return barcode_uri
+   #  buffer = io.BytesIO()
+   #  code.write(buffer)
+   #  buffer.seek(0)
+   #  barcode_data = base64.b64encode(buffer.read()).decode('utf-8')
+   #  barcode_uri = 'data:image/png;base64,' + barcode_data
+   #  return barcode_uri
 
 @app.context_processor
 def inject_barcode():
