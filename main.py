@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect,session,logging,flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock,get_pid
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
 import pygal
 import barcode
 from barcode import EAN13
@@ -142,7 +142,34 @@ def bar1():
     bar_chart1.x_labels = name1
     bar_chart1.add('stock', stockk)
     bar_chart1=bar_chart1.render_data_uri()
-    return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1)
+
+       #Graph to show revenue per day
+    daily_revenue = revenue_per_day()
+    dates = []
+    sales_revenue_per_day = [] 
+    for i in daily_revenue:
+     dates.append(i[0])
+     sales_revenue_per_day.append(i[1]) 
+    line_chart2 = pygal.Line()
+    line_chart2.title = "Revenue per Day"
+    line_chart2.x_labels = dates
+    line_chart2.add("Revenue(KSh)", sales_revenue_per_day)
+    line_chart2=line_chart2.render_data_uri()
+
+   #Graph to show revenue per month
+    monthly_revenue = revenue_per_month()
+    dates = []
+    sales_revenue_per_month = [] 
+    for i in monthly_revenue:
+     dates.append(i[0])
+     sales_revenue_per_month.append(i[1]) 
+    line_chart1 = pygal.Line()
+    line_chart1.title = "Revenue per Month"
+    line_chart1.x_labels = dates
+    line_chart1.add("Revenue(KSh)", sales_revenue_per_month)
+    line_chart1=line_chart1.render_data_uri()
+
+    return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1, line_chart1=line_chart1, line_chart2=line_chart2)
 
 # @app.route("/login") 
 # def login():
