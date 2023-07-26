@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect,session,logging,flash, send_file
+from flask import Flask, render_template, request, redirect,session,flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
 from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
@@ -7,6 +7,8 @@ import barcode
 from barcode import EAN13
 from barcode.writer import ImageWriter
 
+# from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 # Create an object called app
@@ -14,7 +16,7 @@ from barcode.writer import ImageWriter
 # All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
 # All CSS/JS/ Images are put inside "static" folder
 app = Flask(__name__)
-
+# app.secret_key = "1234"
 
 # a route is an extension of url which loads you a html page
 # @ - a decorator(its in-built ) make something be static
@@ -226,23 +228,24 @@ def inject_remaining_stock():
 
 
 
+barcod = []
+def generate_barcode():
+    number = get_pid()
+    barcod=EAN13(number)
+    barcod.save("new_code.svg")
+    barcod.append()
+   
+# @app.context_processor
+# def inject_barcode():
+#    return {'generate_barcode': generate_barcode}
 
-def generate_barcode(data):
-    number = "123456781237"
-    My_code=EAN13(number)
-    My_code.save("new_code.svg")
-
-    # Render the barcode as an image and convert it to a Base64 data URI
-   #  buffer = io.BytesIO()
-   #  code.write(buffer)
-   #  buffer.seek(0)
-   #  barcode_data = base64.b64encode(buffer.read()).decode('utf-8')
-   #  barcode_uri = 'data:image/png;base64,' + barcode_data
-   #  return barcode_uri
-
-@app.context_processor
-def inject_barcode():
-   return {'generate_barcode': generate_barcode}
+@app.route('/generate_barcodes')
+def generate_barcodes():
+    prods = get_pid()
+    for product in prods:
+        filename = f'barcode_{product.id}.png'
+        generate_barcode(str(product.id), filename)
+    return "Barcodes generated successfully!"
 
    
 app.run(debug=True)
