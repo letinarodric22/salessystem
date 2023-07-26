@@ -12,9 +12,6 @@ conn = psycopg2.connect("dbname=duka_june user=postgres password=1234")
 cur = conn.cursor()
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# from werkzeug.security import generate_password_hash, check_password_hash
-
-
 
 # Create an object called app
 # __name__ is used to tell Flask where to access HTML Files
@@ -79,8 +76,7 @@ def editproducts():
       update_products(vs)
       return redirect("/products")
    
-
-   
+ 
 @app.route('/addsales', methods=["POST", "GET"])
 def addsales():
    if request.method=="POST":
@@ -91,7 +87,6 @@ def addsales():
       return redirect("/sales")
 
       
-
 
 @app.route("/sales")
 @login_required
@@ -118,8 +113,6 @@ def addstock():
       stockk=(pid,quantity,'now()')
       insert_stock(stockk)
       return redirect("/stockk")
-
-
 
 
 @app.route("/dashboard")
@@ -192,14 +185,6 @@ def bar1():
 
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1, line_chart1=line_chart1, line_chart2=line_chart2)
 
-# @app.route("/login") 
-# def login():
-#    return render_template('login.html')
-
-
-@app.route("/register") 
-def register():
-   return render_template('register.html')
 
 
 @app.route('/signup', methods=["POST", "GET"])
