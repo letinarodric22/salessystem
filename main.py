@@ -44,7 +44,6 @@ def home1():
 
 
 @app.route("/products")
-@login_required
 def products():
    prods = fetch_data("products")
    return render_template('products.html', prods=prods)
@@ -189,7 +188,7 @@ def bar1():
 
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
-   if request.method=="POST":
+   if request.method == "POST":
       full_name = request.form["full_name"]
       email = request.form["email"]
       password  = request.form["password"]
