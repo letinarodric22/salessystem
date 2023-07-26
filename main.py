@@ -3,9 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
 from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
 import pygal
+import psycopg2
 import barcode
 from barcode import EAN13
 from barcode.writer import ImageWriter
+from functools import wraps
+conn = psycopg2.connect("dbname=duka_june user=postgres password=1234")
+cur = conn.cursor()
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -16,11 +21,21 @@ from barcode.writer import ImageWriter
 # All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
 # All CSS/JS/ Images are put inside "static" folder
 app = Flask(__name__)
-# app.secret_key = "1234"
+app.secret_key = "1234"
+
+
+def login_required(view_func):
+    @wraps(view_func)
+    def decorated_view(*args, **kwargs):
+        if not session.get('logged_in') and not session.get('registered'):
+            return redirect('/login') 
+        return view_func(*args, **kwargs)
+    return decorated_view
 
 # a route is an extension of url which loads you a html page
 # @ - a decorator(its in-built ) make something be static
 @app.route("/")
+@login_required
 def home():
     return render_template("landing.html")
 
@@ -32,6 +47,7 @@ def home1():
 
 
 @app.route("/products")
+@login_required
 def products():
    prods = fetch_data("products")
    return render_template('products.html', prods=prods)
@@ -78,6 +94,7 @@ def addsales():
 
 
 @app.route("/sales")
+@login_required
 def sales():
    sales = fetch_data("sales")
    prods= fetch_data("products")
@@ -86,6 +103,7 @@ def sales():
 
 
 @app.route("/stockk")
+@login_required
 def stockk():
    stockk = fetch_data("stockk")
    prods= fetch_data("products")
@@ -105,6 +123,7 @@ def addstock():
 
 
 @app.route("/dashboard")
+@login_required
 def bar1():   
    #  bar graph for sales per product
     bar_chart = pygal.Bar()
@@ -200,23 +219,25 @@ def adduser():
    
       
 
+
 @app.route('/login', methods=["POST", "GET"])
 def login():
-    error = None
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        users = loginn(email, password)
+        users = loginn()
         if users:
             for user in users:
                 db_email = user[0]
                 db_password = user[1]
                 if db_email == email and db_password == password:
+                    flash('Authentication has been successfully verified!', category='success')
+                    session['logged_in'] = True
                     return redirect("/index")
-            error = "Invalid password or email. Please try again."
-        else:
-            error = "Account not found. Please register first."
-    return render_template("login.html", error=error)  
+            else:
+                flash('Incorrect email or password, please try again.', category='error')
+                return redirect("/login")
+    return render_template("login.html") 
 
 
 @app.context_processor

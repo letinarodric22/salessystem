@@ -115,7 +115,7 @@ def add_user(v):
     return q
 
 
-def loginn(email, password):
+def loginn():
      q="SELECT email, password FROM users;"
      cur.execute(q)
      results =cur.fetchall()

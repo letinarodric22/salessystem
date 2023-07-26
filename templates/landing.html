@@ -2,10 +2,14 @@
 <html>
 
 <head>
-    <title>Welcome to My Website</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Landing Page</title>
     <style>
-        body .image-section {
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .image-section {
             margin: 0;
             padding: 0;
             background-image: url("static/img5.jpeg");
@@ -18,84 +22,82 @@
             background-blend-mode: color;
             background-color: rgba(255, 0, 0, 0.5);
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: larger;
+            position: relative;
+            /* Adding relative positioning to the container */
+        }
+
+        /* Adding styles for login and register buttons */
+        .top-right-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 100px;
+            left: 500px;
+            font-size: 40px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            color: yellow;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Styling the buttons */
+        .top-right-buttons .btn {
+            margin-left: 10px;
+            position: relative; /* Adding relative positioning to the button */
+            transition: box-shadow 0.3s ease; /* Adding a transition effect for the box-shadow */
+            padding: 10px 20px; /* Adding padding to the buttons */
+            border: none; /* Removing the default button border */
+            border-radius: 5px; /* Adding rounded corners to the buttons */
+            background-color: #3498db; /* Changing the button background color */
+            color: #fff; /* Changing the button text color */
+            text-decoration: none; /* Removing underline for anchor tag (login and register buttons) */
+        }
+
+        .top-right-buttons .btn:hover {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Adding a box-shadow when hovering the button */
+            background-color: #2980b9; /* Changing the background color on hover */
+        }
+
+        /* Centering the text within the container */
+        .centered-text {
+            text-align: center;
+            color: #fff;
+            font-size: xx-large;
         }
     </style>
 </head>
 
 <body>
-
     <div class="row">
-        <div col-md-6>
+        <div class="col-12 col-md-6">
             <section class="image-section">
-                <div class="row">
-                    <div col-3>
 
-                        <h1>The grocery store for everyone.<br>
-                            Explore, find, and buy.<br>
-                            Fill every day with groceries.</h1>
-                    </div>
-                    
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Login or Signup
-                    </button>
+                <a href="#" class="logo">LETINA GROCER</a>
+                <!-- Top-right login and register buttons -->
+                <div class="top-right-buttons">
+                    <a href="/login" class="btn btn-primary">Login</a>
+                    <a href="/register" class="btn btn-primary">Sign Up</a>
                 </div>
-            </section>
-        </div>
-        <div col-6>
-            <section>
-                <!-- Modal -->
-                <div>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">grocer</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h2>Login</h2>
-                                            <form method="POST" action="/login">
-                                                <div class="mb-3">
-                                                    <label for="email" class="form-label">Email</label>
-                                                    <input type="email" class="form-control" id="email" name="email"
-                                                        required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="password" class="form-label">Password</label>
-                                                    <input type="password" class="form-control" id="password"
-                                                        name="password" required>
-                                                </div>
-                                                {% if error %}
-                                                <p>
-                                                <h4 style="color: red;">{{ error }}</h4>
-                                                </p>
-                                                {% endif %}
-                                                <button type="submit" class="btn btn-primary">Login</button>
-                                            </form>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <h2>Sign Up</h2>
-                                            <p>Don't have an account? Sign up now!</p>
-                                            <a href="/register" class="btn btn-primary">Sign Up</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <div class="centered-text">
+                            <h1>The grocery store for everyone.<br>
+                                Explore, find, and buy.<br>
+                                Fill every day with groceries.</h1>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+        <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+            <!-- If you want to add any content to the right side, you can do it here -->
+        </div>
     </div>
-   
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

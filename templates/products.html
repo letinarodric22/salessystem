@@ -64,8 +64,7 @@
                     <td>{{ p[1] }}</td>
                     <td>{{ p[2] }}</td>
                     <td>{{ p[3] }}</td>
-                    <td> <img src="{{ url_for('static', filename='barcodes/barcode_' + (prods.id) + '.png') }}">
-                    </td>
+                    <td>{{ p[0] }}</td>
                     {% if remain_stock(p[0]) | int < 20 %} <td style="background-color: pink;">{{
                         remain_stock(p[0])
                         }}</td>
