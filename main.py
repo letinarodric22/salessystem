@@ -188,17 +188,18 @@ def bar1():
 
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
+   error1 = None
    if request.method == "POST":
       full_name = request.form["full_name"]
       email = request.form["email"]
       password  = request.form["password"]
       confirm_password=request.form["confirm_password"]
-      error1 = None
+      users=(full_name,email,password,confirm_password,'now()')
+      add_user(users)
+      
       error1="account created successfully..back to login"
       if password != confirm_password:
          error1 = "password do not match! please enter again."
-   users=(full_name,email,password,confirm_password,'now()')
-   add_user(users)
    return render_template("register.html", error1=error1)
    
       
