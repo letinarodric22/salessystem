@@ -5,7 +5,9 @@ from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_
 import pygal
 import psycopg2
 import barcode
-from barcode import EAN13
+from PIL import Image
+from barcode import generate
+from barcode import Code128
 from barcode.writer import ImageWriter
 from functools import wraps
 conn = psycopg2.connect("dbname=duka_june user=postgres password=1234")
@@ -232,26 +234,17 @@ def inject_remaining_stock():
       return stock[0] if stock is not None else int("0")
     return {'remain_stock': remain_stock}
 
-
-
-barcod = []
+@app.context_processor
 def generate_barcode():
-    number = get_pid()
-    barcod=EAN13(number)
-    barcod.save("new_code.svg")
-    barcod.append()
-   
-# @app.context_processor
-# def inject_barcode():
-#    return {'generate_barcode': generate_barcode}
+    id_list = get_pid()
+    barcode_paths = []
+    for pid_tuple in id_list:
+        pid = pid_tuple[0]
+        code = Code128(str(pid), writer=ImageWriter())
+        barcode_path = f"static/barcodes/{pid}.png"
+        code.save(barcode_path)
+        barcode_paths.append(barcode_path)
+    return {'generate_barcode': generate_barcode}
 
-@app.route('/generate_barcodes')
-def generate_barcodes():
-    prods = get_pid()
-    for product in prods:
-        filename = f'barcode_{product.id}.png'
-        generate_barcode(str(product.id), filename)
-    return "Barcodes generated successfully!"
-
-   
-app.run(debug=True)
+if __name__ == '__main__':
+ app.run(debug=True)
