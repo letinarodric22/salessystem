@@ -96,14 +96,12 @@ def get_remaining_stock(product_id=None):
         return None
     
 
-def get_pid(product_id=None):
+def get_pid():
     q = "SELECT id FROM products;"
-    cur.execute(q, (product_id,))
+    cur.execute(q)
     results = cur.fetchall()
-    if results:
-        return results[0]
-    else:
-        return None   
+    return results
+      
     
 
 def add_user(v):
