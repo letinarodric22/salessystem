@@ -1,12 +1,10 @@
-from flask import Flask, render_template, request, redirect,session,flash, send_file
+from flask import Flask, render_template, request, redirect,session,flash, g, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products,sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
+from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products
+from pgfunc import sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
 import pygal
 import psycopg2
-import barcode
-from PIL import Image
-from barcode import generate
 from barcode import Code128
 from barcode.writer import ImageWriter
 from functools import wraps
@@ -20,32 +18,43 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
 # All CSS/JS/ Images are put inside "static" folder
 app = Flask(__name__)
-app.secret_key = "1234"
+app.secret_key = "12345"
 
 
 def login_required(view_func):
     @wraps(view_func)
     def decorated_view(*args, **kwargs):
-        if not session.get('logged_in') and not session.get('registered'):
-            return redirect('/login') 
+        if not session.get('logged_in'):
+            return redirect('/login')
         return view_func(*args, **kwargs)
     return decorated_view
+
+
+@app.before_request
+def restrict_pages():
+    # List of routes that require authentication
+    protected_routes = ['/products', '/sales', '/dashboard', '/stockk']
+
+    # Check if the requested path is a protected route
+    if request.path in protected_routes and not session.get('logged_in') and not session.get('registered'):
+        return redirect(url_for('login'))
 
 # a route is an extension of url which loads you a html page
 # @ - a decorator(its in-built ) make something be static
 @app.route("/")
-@login_required
 def home():
     return render_template("landing.html")
 
 
 @app.route("/index")
+@login_required
 def home1():
     return render_template("index.html")
 
 
 
 @app.route("/products")
+@login_required
 def products():
    prods = fetch_data("products")
    return render_template('products.html', prods=prods)
@@ -196,9 +205,10 @@ def adduser():
       email = request.form["email"]
       password  = request.form["password"]
       confirm_password=request.form["confirm_password"]
-      users=(full_name,email,password,confirm_password,'now()')
+      hashed_password = generate_password_hash(password)
+      hashed_password1 = generate_password_hash(confirm_password)
+      users=(full_name,email,password,confirm_password, hashed_password, hashed_password1,'now()')
       add_user(users)
-      
       error1="account created successfully..back to login"
       if password != confirm_password:
          error1 = "password do not match! please enter again."
@@ -206,25 +216,28 @@ def adduser():
    
       
 
-
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
         users = loginn()
-        if users:
-            for user in users:
-                db_email = user[0]
-                db_password = user[1]
-                if db_email == email and db_password == password:
-                    flash('Authentication has been successfully verified!', category='success')
-                    session['logged_in'] = True
-                    return redirect("/index")
-            else:
-                flash('Incorrect email or password, please try again.', category='error')
-                return redirect("/login")
-    return render_template("login.html") 
+
+        for user in users:
+            db_email = user[0]
+            db_hashed_password = user[1]
+
+            if db_email == email and check_password_hash(db_hashed_password, password):
+                session['logged_in'] = True
+               
+
+                flash('Authentication has been successfully verified!', category='success')
+                return redirect('/index')
+
+        flash('Incorrect email or password, please try again.', category='error')
+        return redirect("/login")
+    
+    return render_template("login.html")
 
 
 @app.context_processor
@@ -245,6 +258,9 @@ def generate_barcode():
         code.save(barcode_path)
         barcode_paths.append(barcode_path)
     return {'generate_barcode': generate_barcode}
+
+
+
 
 if __name__ == '__main__':
  app.run(debug=True)
