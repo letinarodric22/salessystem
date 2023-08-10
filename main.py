@@ -13,18 +13,28 @@ cur = conn.cursor()
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+
+
+
+
 # Create an object called app
 # __name__ is used to tell Flask where to access HTML Files
 # All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
 # All CSS/JS/ Images are put inside "static" folder
 app = Flask(__name__)
-app.secret_key = "12345"
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@5432/duka_june'
+# db = SQLAlchemy(app)
+app.secret_key = "1234"
 
+
+
+    
 
 def login_required(view_func):
     @wraps(view_func)
     def decorated_view(*args, **kwargs):
         if not session.get('logged_in'):
+            flash('Please log in to access this page.', 'error')
             return redirect('/login')
         return view_func(*args, **kwargs)
     return decorated_view
@@ -216,7 +226,7 @@ def adduser():
    
       
 
-@app.route('/login', methods=["POST", "GET"])
+@app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         email = request.form["email"]
@@ -228,16 +238,16 @@ def login():
             db_hashed_password = user[1]
 
             if db_email == email and check_password_hash(db_hashed_password, password):
-                session['logged_in'] = True
-               
-
-                flash('Authentication has been successfully verified!', category='success')
+                session['db_email'] = email
+                
                 return redirect('/index')
 
-        flash('Incorrect email or password, please try again.', category='error')
+        flash('Incorrect email or password, please try again.', 'error')
         return redirect("/login")
-    
+
     return render_template("login.html")
+
+
 
 
 @app.context_processor
@@ -260,7 +270,17 @@ def generate_barcode():
     return {'generate_barcode': generate_barcode}
 
 
+@app.route('/logout')
+def logout():
+    # Clear the session data to log the user out
+    session.clear()
+    return redirect(url_for('login'))
 
 
-if __name__ == '__main__':
- app.run(debug=True)
+
+if __name__ == '__main__': 
+
+
+    app.run(debug=True)
+  
+ 

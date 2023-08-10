@@ -24,9 +24,20 @@
             <h4 class="card-title">Login</h4>
           </div>
           <div class="card-body">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+              <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+            {% endwith %}
             <form action="/login" method="POST">
               <div class="mb-3">
-                
+
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
               </div>
@@ -39,12 +50,6 @@
               <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="rememberMe">
                 <label class="form-check-label" for="rememberMe">Remember me</label>
-                <div class="modal-body">
-                {% if error %}
-                <p>
-                <h4 style="color: red;">{{ error }}</h4>
-                </p>
-                {% endif %}</div>
               </div>
 
               <button type="submit" class="btn btn-primary">Login</button>
@@ -53,7 +58,7 @@
           <div class="card-footer">
             <p>Don't have an account? <a href="/signup">Sign up</a></p>
           </div>
-         
+
         </div>
       </div>
     </div>
