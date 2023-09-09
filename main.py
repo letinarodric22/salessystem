@@ -11,6 +11,7 @@ from functools import wraps
 conn = psycopg2.connect("dbname=duka_june user=postgres password=1234")
 cur = conn.cursor()
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 
 
@@ -34,20 +35,19 @@ def login_required(view_func):
     @wraps(view_func)
     def decorated_view(*args, **kwargs):
         if not session.get('logged_in'):
-            flash('Please log in to access this page.', 'error')
-            return redirect('/login')
+            return redirect(url_for('login'))
         return view_func(*args, **kwargs)
     return decorated_view
 
 
-@app.before_request
-def restrict_pages():
-    # List of routes that require authentication
-    protected_routes = ['/products', '/sales', '/dashboard', '/stockk']
+# @app.before_request
+# def restrict_pages():
+#     # List of routes that require authentication
+#     protected_routes = ['/products', '/sales', '/dashboard', '/stockk']
 
-    # Check if the requested path is a protected route
-    if request.path in protected_routes and not session.get('logged_in') and not session.get('registered'):
-        return redirect(url_for('login'))
+#     # Check if the requested path is a protected route
+#     if request.path in protected_routes and not session.get('logged_in'):
+#         return redirect('/login')
 
 # a route is an extension of url which loads you a html page
 # @ - a decorator(its in-built ) make something be static
@@ -57,7 +57,7 @@ def home():
 
 
 @app.route("/index")
-@login_required
+# @login_required
 def home1():
     return render_template("index.html")
 
@@ -68,6 +68,14 @@ def home1():
 def products():
    prods = fetch_data("products")
    return render_template('products.html', prods=prods)
+
+
+
+@app.context_processor
+def inject_datetime():
+    now = datetime.now()
+    return {'current_date': now.strftime('%d-%m-%Y'), 'current_time': now.strftime('%I:%M:%S %p')}
+
 
 
 
@@ -109,7 +117,7 @@ def addsales():
       
 
 @app.route("/sales")
-@login_required
+# @login_required
 def sales():
    sales = fetch_data("sales")
    prods= fetch_data("products")
@@ -118,7 +126,7 @@ def sales():
 
 
 @app.route("/stockk")
-@login_required
+# @login_required
 def stockk():
    stockk = fetch_data("stockk")
    prods= fetch_data("products")
@@ -130,7 +138,7 @@ def addstock():
    if request.method=="POST":
       pid= request.form["pid"]
       quantity=request.form["quantity"]
-      stockk=(pid,quantity,'now()')
+      stockk=(pid,quantity, 'now()')
       insert_stock(stockk)
       return redirect("/stockk")
 
@@ -177,6 +185,8 @@ def bar1():
     bar_chart1.add('stock', stockk)
     bar_chart1=bar_chart1.render_data_uri()
 
+    
+
        #Graph to show revenue per day
     daily_revenue = revenue_per_day()
     dates = []
@@ -214,14 +224,14 @@ def adduser():
       full_name = request.form["full_name"]
       email = request.form["email"]
       password  = request.form["password"]
-      confirm_password=request.form["confirm_password"]
+      confirm_password=request.form["password"]
       hashed_password = generate_password_hash(password)
-      hashed_password1 = generate_password_hash(confirm_password)
-      users=(full_name,email,password,confirm_password, hashed_password, hashed_password1,'now()')
+      users=(full_name,email, hashed_password, 'now()')
       add_user(users)
       error1="account created successfully..back to login"
       if password != confirm_password:
          error1 = "password do not match! please enter again."
+         return redirect('/register')
    return render_template("register.html", error1=error1)
    
       
@@ -232,19 +242,15 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         users = loginn()
-
         for user in users:
             db_email = user[0]
             db_hashed_password = user[1]
-
             if db_email == email and check_password_hash(db_hashed_password, password):
-                session['db_email'] = email
                 
                 return redirect('/index')
-
+            session['logged_in'] = True
         flash('Incorrect email or password, please try again.', 'error')
         return redirect("/login")
-
     return render_template("login.html")
 
 
@@ -270,11 +276,10 @@ def generate_barcode():
     return {'generate_barcode': generate_barcode}
 
 
-@app.route('/logout')
+@app.route("/logout")
 def logout():
-    # Clear the session data to log the user out
-    session.clear()
-    return redirect(url_for('login'))
+    session.pop("username", None)
+    return redirect(url_for("login"))
 
 
 

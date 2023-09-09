@@ -84,7 +84,13 @@
                                 {% endfor %}
                             </td>
                             <td>{{ st[2] }}</td>
-                            <td>{{ st[3] }}</td>
+                            <td>
+                                {% if loop.index == 1 %}
+                                    {{ current_date }}  
+                                {% else %}
+                                    {{ st[3].strftime('%d-%m-%Y') }}  
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

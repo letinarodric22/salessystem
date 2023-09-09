@@ -106,7 +106,7 @@ def get_pid():
 
 def add_user(v):
     vs = str(v)
-    q = "insert into users(full_name,email, password, confirm_password, hashed_password, hashed_c_password, created_at) "\
+    q = "insert into userss(full_name,email, h_password, created_at) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
@@ -114,7 +114,7 @@ def add_user(v):
 
 
 def loginn():
-     q="SELECT email, hashed_password FROM users;"
+     q="SELECT email, h_password FROM userss;"
      cur.execute(q)
      results =cur.fetchall()
      return results
