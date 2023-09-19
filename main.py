@@ -4,6 +4,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products
 from pgfunc import sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
 import pygal
+import os
 import psycopg2
 from barcode import Code128
 from barcode.writer import ImageWriter
@@ -25,7 +26,7 @@ from datetime import datetime
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@5432/duka_june'
 # db = SQLAlchemy(app)
-app.secret_key = "1234"
+app.secret_key = os.urandom(24)
 
 
 
@@ -57,17 +58,22 @@ def home():
 
 
 @app.route("/index")
-# @login_required
 def home1():
-    return render_template("index.html")
+       if not session.get('logged_in'):
+        return redirect(url_for('login'))
+       else:
+         return render_template("index.html")
 
 
 
 @app.route("/products")
-@login_required
+# @login_required
 def products():
-   prods = fetch_data("products")
-   return render_template('products.html', prods=prods)
+      if not session.get('logged_in'):
+        return redirect(url_for('login'))
+      else:
+        prods = fetch_data("products")
+        render_template('products.html', prods=prods)
 
 
 
@@ -117,20 +123,24 @@ def addsales():
       
 
 @app.route("/sales")
-# @login_required
 def sales():
-   sales = fetch_data("sales")
-   prods= fetch_data("products")
-   return render_template('sales.html', sales=sales, prods=prods)
+   if not session.get('logged_in'):
+        return redirect(url_for('login'))
+   else:
+       sales = fetch_data("sales")
+       prods= fetch_data("products")
+       return render_template('sales.html', sales=sales, prods=prods)
 
 
 
 @app.route("/stockk")
-# @login_required
 def stockk():
-   stockk = fetch_data("stockk")
-   prods= fetch_data("products")
-   return render_template('stock.html', stockk=stockk, prods=prods)
+       if not session.get('logged_in'):
+        return redirect(url_for('login'))
+       else:
+           stockk = fetch_data("stockk")
+           prods= fetch_data("products")
+           return render_template('stock.html', stockk=stockk, prods=prods)
 
 
 @app.route('/addstock', methods=["POST"])
@@ -144,7 +154,6 @@ def addstock():
 
 
 @app.route("/dashboard")
-@login_required
 def bar1():   
    #  bar graph for sales per product
     bar_chart = pygal.Bar()
@@ -246,12 +255,16 @@ def login():
             db_email = user[0]
             db_hashed_password = user[1]
             if db_email == email and check_password_hash(db_hashed_password, password):
-                
+                session['logged_in'] = True
                 return redirect('/index')
-            session['logged_in'] = True
         flash('Incorrect email or password, please try again.', 'error')
-        return redirect("/login")
     return render_template("login.html")
+
+# @app.route('/logout')
+# def logout():
+#     session.pop('logged_in', None)
+#     return redirect(url_for('login'))
+
 
 
 
@@ -282,10 +295,7 @@ def logout():
     return redirect(url_for("login"))
 
 
-
 if __name__ == '__main__': 
-
-
     app.run(debug=True)
   
  
