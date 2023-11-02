@@ -57,12 +57,15 @@ def home():
     return render_template("landing.html")
 
 
-@app.route("/index")
-def home1():
-       if not session.get('logged_in'):
+@app.route("/index", methods=['GET'])
+def index():
+    if not session.get('logged_in'):
         return redirect(url_for('login'))
-       else:
-         return render_template("index.html")
+    else:
+        search_query = request.args.get('search', default='', type=str)
+        prods = fetch_data('products')
+        prods = [p for p in prods if search_query.lower() in p[1].lower()]
+        return render_template('index.html', search_query=search_query, prods=prods)
 
 
 
@@ -73,7 +76,7 @@ def products():
         return redirect(url_for('login'))
       else:
         prods = fetch_data("products")
-        render_template('products.html', prods=prods)
+        return render_template('products.html', prods=prods)
 
 
 
