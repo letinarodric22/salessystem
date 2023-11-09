@@ -92,13 +92,13 @@
                 {% for p in prods %}
                 <div class="col-lg-4 mb-4">
                     <div class="card">
-                        <div class="card-body">
-                            <img src="{{ url_for('static', filename='barcodes/' + p[0]|string + '.png.png') }}"
+                        <!-- <div class="card-body">
+                            <img src="{{ url_for('static', filename='barcodes/' + p[0]|string + 'png.png') }}"
                             alt="Barcode" width="100" height="100>
                             <h2 class= "card-title" style="color:black;">{{ p[1] }}</h2>
                             <p class="card-text"> <h5 style="color:black;">Kshs.{{ p[3] }}</h5></p>
                             <a href="#" class="btn btn-primary">Buy Now</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 {% endfor %}

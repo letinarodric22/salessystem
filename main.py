@@ -279,17 +279,17 @@ def inject_remaining_stock():
       return stock[0] if stock is not None else int("0")
     return {'remain_stock': remain_stock}
 
-@app.context_processor
-def generate_barcode():
-    id_list = get_pid()
-    barcode_paths = []
-    for pid_tuple in id_list:
-        pid = pid_tuple[0]
-        code = Code128(str(pid), writer=ImageWriter())
-        barcode_path = f"static/barcodes/{pid}.png"
-        code.save(barcode_path)
-        barcode_paths.append(barcode_path)
-    return {'generate_barcode': generate_barcode}
+# @app.context_processor
+# def generate_barcode():
+#     id_list = get_pid()
+#     barcode_paths = []
+#     for pid_tuple in id_list:
+#         pid = pid_tuple[0]
+#         code = Code128(str(pid), writer=ImageWriter())
+#         barcode_path = f"static/barcodes/{pid}.png"
+#         code.save(barcode_path)
+#         barcode_paths.append(barcode_path)
+#     return {'generate_barcode': generate_barcode}
 
 
 @app.route("/logout")
