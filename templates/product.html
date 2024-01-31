@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Barcodes</title>
+    <style>
+        /* Add any custom styling for the barcode display if needed */
+        .barcode-img {
+            display: block;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Barcodes</h1>
+    {% for product_id, barcode_uri in product_data %}
+        <p>Product ID: {{ product_id }}</p>
+        <img src="{{ barcode_uri }}" class="barcode-img" alt="Barcode for ID {{ product_id }}">
+    {% endfor %}
+</body>
+</html>
