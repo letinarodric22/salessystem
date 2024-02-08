@@ -15,7 +15,7 @@
     body .image-section {
         margin: 0;
         padding: 0;
-        background-image: url("static/img5.jpeg");
+        background-image: url("static/img/img5.jpeg");
         background-size: cover;
         height: 100vh;
         display: flex;
@@ -82,19 +82,20 @@
     <button type="submit" style='color: deeppink; background-color: beige;'>Search</button>
 </form>
 
+
 <section class="py-5" style="background-color: greenyellow;">
     <div class="container">
-        <h2>Search results for {{ search_query }}:</h2>
+        <h2>Featured Products:</h2>
         <div class="row">
             {% if prods %}
-                {% for p in prods %}
+                {% for p in prods if p[4] == 'featured' %}
                 <div class="col-lg-4 mb-4">
                     <div class="card">
+                        <img src="{{ url_for('static', filename='barcodes/' + p[0]|string + '.png.png') }}"
+                             class="card-img-top" alt="Barcode" style="width: 100px; height: 100px;">
                         <div class="card-body">
-                            <img src="{{ url_for('static', filename='barcodes/' + p[0]|string + '.png.png') }}"
-                            alt="Barcode" width="100" height="100>
-                            <h2 class= "card-title" style="color:black;">{{ p[1] }}</h2>
-                            <p class="card-text"> <h5 style="color:black;">Kshs.{{ p[3] }}</h5></p>
+                            <h2 class="card-title" style="color: black;">{{ p[1] }}</h2>
+                            <p class="card-text"><h5 style="color: black;">Kshs.{{ p[3] }}</h5></p>
                             <a href="#" class="btn btn-primary">Buy Now</a>
                         </div>
                     </div>
@@ -106,7 +107,6 @@
         </div>
     </div>
 </section>
-
 
 
     <section id="contact">

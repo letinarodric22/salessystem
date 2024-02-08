@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
 from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products
 from pgfunc import sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
-from mpesa.py import nitiate_mpesa_transaction
+
 import pygal
 import os
 import psycopg2
@@ -296,6 +296,6 @@ def logout():
 
 
 if __name__ == '__main__': 
-    app.run(debug=True)
+    app.run(host = "0.0.0.0", port = 3400, debug=True)
   
  

@@ -1,4 +1,13 @@
 import requests
+from datetime import datetime
+
+def generate_timestamp():
+    # Get the current date and time
+    current_datetime = datetime.now()
+    # Format the date and time as a string
+    timestamp = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    return timestamp
+
 
 def initiate_mpesa_transaction(amount, phone_number):
     # Make API call to initiate M-Pesa transaction
@@ -9,8 +18,8 @@ def initiate_mpesa_transaction(amount, phone_number):
     }
     payload = {
         "BusinessShortCode": "174379",
-        "Password": "YOUR_PASSWORD",
-        "Timestamp": "YOUR_TIMESTAMP",
+        "Password": "roderick2024",
+        "Timestamp": generate_timestamp(),
         "TransactionType": "CustomerPayBillOnline",
         "Amount": amount,
         "PartyA": phone_number,
