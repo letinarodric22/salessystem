@@ -13,6 +13,7 @@ body .navbar {
 body {
     padding-top: 58px;
     font-family: sans-serif;
+    scroll-behavior: smooth;
     /* Adjust the value as needed to match the height of your navbar */
 }
 
