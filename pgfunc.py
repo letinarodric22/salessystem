@@ -1,11 +1,10 @@
-import psycopg2, json
+import psycopg2
 # psycopg2 is a popular Python adapter for PostgreSQL that allows you to interact with PostgreSQL databases using Python code
 
-
 try:
-    conn = psycopg2.connect("dbname= duka_june user=postgres password=1234")
+    conn = psycopg2.connect("dbname= inventory user=postgres password=1234")
     cur =conn.cursor()
-except Exception as e:
+except Exception as e: 
     print(e)    
 
 
@@ -21,7 +20,7 @@ def fetch_data(tbname):
 
 def insert_products(v):
     vs = str(v)
-    q = "insert into products(name,buying_price,selling_price) "\
+    q = "insert into products(name,buying_price,selling_price, image_url) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
@@ -33,12 +32,28 @@ def update_products(vs):
         name = vs[1]
         buying_price = vs[2]
         selling_price = vs[3]
-        q = "UPDATE products SET name = %s, buying_price = %s, selling_price = %s WHERE id = %s"
-        cur.execute(q, (name, buying_price, selling_price,id))
+        image_url = vs[4]
+        q = "UPDATE products SET name = %s, buying_price = %s, selling_price = %s, image_url = %s WHERE id = %s"
+        cur.execute(q, (name, buying_price, selling_price, image_url,id))
         conn.commit()
         return q
+
+def delete_product(id):
+    # Delete referencing records in the "stocks" table first
+    q_delete_stocks = "DELETE FROM stocks WHERE pid = %s;"
+    cur.execute(q_delete_stocks, (id,))
+
+# Delete referencing records in the "stocks" table first
+    q_delete_sales = "DELETE FROM sales WHERE pid = %s;"
+    cur.execute(q_delete_sales, (id,))
+
+    # Now, delete the record in the "products" table
+    q_delete_product = "DELETE FROM products WHERE id = %s;"
+    cur.execute(q_delete_product, (id,))
+    conn.commit()
+
+
     
-   
 def insert_sales(v):
     vs = str(v)
     q = "insert into sales(pid,quantity, created_at) "\
@@ -50,7 +65,7 @@ def insert_sales(v):
    
 def insert_stock(v):
     vs = str(v)
-    q = "insert into stockk(pid,quantity, created_at) "\
+    q = "insert into stocks(pid,quantity, created_at) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
@@ -82,7 +97,7 @@ def get_remaining_stock(product_id=None):
     q = """ SELECT 
             COALESCE(st.stock_quantity, 0) - COALESCE(sa.sales_quantity, 0) AS closing_stock
             FROM
-                (SELECT pid, SUM(quantity) AS stock_quantity FROM stockk GROUP BY pid) AS st
+                (SELECT pid, SUM(quantity) AS stock_quantity FROM stocks GROUP BY pid) AS st
             LEFT JOIN
                 (SELECT pid, SUM(quantity) AS sales_quantity FROM sales GROUP BY pid) AS sa
             ON st.pid = sa.pid
@@ -96,28 +111,13 @@ def get_remaining_stock(product_id=None):
         return None
     
 
-def get_pid():
-    q = "SELECT id FROM products;"
-    cur.execute(q)
-    results = cur.fetchall()
-    return results
-      
-    
-
 def add_user(v):
     vs = str(v)
-    q = "insert into userss(full_name,email, h_password, created_at) "\
+    q = "insert into users(full_name,email, h_password, created_at) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
     return q
-
-
-def loginn():
-     q="SELECT email, h_password FROM userss;"
-     cur.execute(q)
-     results =cur.fetchall()
-     return results
 
 def revenue_per_day():
     q = "SELECT TO_CHAR(s.created_at, 'DD-MM-YYYY') AS sale_month, SUM(s.quantity * p.selling_price) AS revenue FROM sales s JOIN products p ON s.pid = p.id GROUP BY TO_CHAR(s.created_at, 'DD-MM-YYYY');;"

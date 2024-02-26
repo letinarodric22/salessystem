@@ -76,35 +76,31 @@
         </div>
     </section>
 
- <!-- Product Section -->
+ <!-- Product search Section -->
  <form action="/index" method="get">
     <input type="text" name="search" placeholder="Search product">
     <button type="submit" style='color: deeppink; background-color: beige;'>Search</button>
 </form>
 
 
-<section class="py-5" style="background-color: greenyellow;">
+<section class="py-5" style="background-color:white;">
     <div class="container">
         <h2>Featured Products:</h2>
         <div class="row">
-            {% if prods %}
-                {% for p in prods if p[4] == 'featured' %}
-                <div class="col-lg-4 mb-4">
-                    <div class="card">
-                        <img src="{{ url_for('static', filename='barcodes/' + p[0]|string + '.png.png') }}"
-                             class="card-img-top" alt="Barcode" style="width: 100px; height: 100px;">
+            {% for p in prods %}
+                <div class="col-lg-3 mb-2">
+                    <div class="card" style="height: 100%;">
+                        <img src='{{ p[5] }}' alt="product image" class="card-img-top" style="height: 60%;">
                         <div class="card-body">
-                            <h2 class="card-title" style="color: black;">{{ p[1] }}</h2>
-                            <p class="card-text"><h5 style="color: black;">Kshs.{{ p[3] }}</h5></p>
+                            <h5 class="card-title" style="color: black;">{{ p[1] }}</h5>
+                            <p class="card-text" style="color: black;">Kshs.{{ p[3] }}</p>
                             <a href="#" class="btn btn-primary">Buy Now</a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-            {% else %}
-                <p>No matching products found.</p>
-            {% endif %}
+            {% endfor %}
         </div>
+        
     </div>
 </section>
 

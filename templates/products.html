@@ -16,7 +16,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">ADD</h1>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add product</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
@@ -37,6 +37,12 @@
                                             <input type="number" class="form-control" id="exampleInputPassword1"
                                                 name="selling_price">
                                         </div>
+
+                                        <div class="mb-3">
+                                            <label for="exampleInputPassword1" class="form-label">image URL</label>
+                                            <input type="text" class="form-control" id="exampleInputPassword1"
+                                                name="image_url">
+                                        </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>
                                 </div>
@@ -50,12 +56,14 @@
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col" style="padding-left: 7%;">NAME</th>
+                        <th scope="col">NAME</th>
                         <th scope="col">Buying_price</th>
                         <th scope="col">Selling_price</th>
                         <th scope="col">BarCode</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Remaining_stock</th>
                         <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,6 +75,9 @@
                     <td>
                         <img src="{{ url_for('static', filename='barcodes/' + p[0]|string + '.png.png') }}"
                             alt="Barcode" width="100" height="100">
+                    </td>
+                    <td>
+                        <img src= '{{ p[5] }}'alt="product image">  
                     </td>
                     {% if remain_stock(p[0]) | int < 20 %} <td style="background-color: pink;">{{
                         remain_stock(p[0])
@@ -89,7 +100,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="editModalLabel{{ p[0] }}">Edit
-                                                    product {{ p[1] }}</h1>
+                                                    {{ p[1] }}</h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -118,12 +129,25 @@
                                                         <input type="number" class="form-control" id="selling_price"
                                                             name="selling_price" value="{{ p[3] }}">
                                                     </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="image_url" class="form-label">image url</label>
+                                                        <input type="text" class="form-control" id="image_url"
+                                                            name="image_url" value="{{ p[5] }}">
+                                                    </div>
                                                     <button type="submit" class="btn btn-primary">Update</button>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </td>
+                            <td>
+                                <!-- Delete Button -->
+                                <form action="/deleteproduct" method="POST">
+                                    <input type="hidden" name="id" value="{{ p[0] }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
                             </td>
                             </tr>
                             {% endfor %}

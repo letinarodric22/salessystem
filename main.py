@@ -1,37 +1,30 @@
-from flask import Flask, render_template, request, redirect,session,flash, g, url_for
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import scoped_session, sessionmaker
-from pgfunc import fetch_data, insert_sales, insert_products,sales_per_day, add_user, loginn, insert_stock, update_products
-from pgfunc import sales_per_products, remaining_stock,get_remaining_stock,get_pid, revenue_per_month, revenue_per_day
-
+from flask import (
+    Flask, render_template, request, redirect, session, flash, url_for
+)
+# from flask_sqlalchemy import SQLAlchemy
+from pgfunc import *
 import pygal
 import os
-import psycopg2
 from barcode import Code128
 from barcode.writer import ImageWriter
 from functools import wraps
-conn = psycopg2.connect("dbname=duka_june user=postgres password=1234")
-cur = conn.cursor()
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-
-
-
-
 
 
 # Create an object called app
 # __name__ is used to tell Flask where to access HTML Files
 # All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
 # All CSS/JS/ Images are put inside "static" folder
+
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@5432/duka_june'
-# db = SQLAlchemy(app)
+# secret key
 app.secret_key = os.urandom(24)
 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@5432/inventory'
+# db = SQLAlchemy(app)
 
 
-    
 
 def login_required(view_func):
     @wraps(view_func)
@@ -42,14 +35,6 @@ def login_required(view_func):
     return decorated_view
 
 
-# @app.before_request
-# def restrict_pages():
-#     # List of routes that require authentication
-#     protected_routes = ['/products', '/sales', '/dashboard', '/stockk']
-
-#     # Check if the requested path is a protected route
-#     if request.path in protected_routes and not session.get('logged_in'):
-#         return redirect('/login')
 
 # a route is an extension of url which loads you a html page
 # @ - a decorator(its in-built ) make something be static
@@ -71,12 +56,12 @@ def index():
 
 
 @app.route("/products")
-# @login_required
 def products():
       if not session.get('logged_in'):
         return redirect(url_for('login'))
       else:
         prods = fetch_data("products")
+        prods.reverse()
         return render_template('products.html', prods=prods)
 
 
@@ -88,14 +73,14 @@ def inject_datetime():
 
 
 
-
 @app.route('/addproducts', methods=["POST", "GET"])
 def addproducts():
    if request.method=="POST":
       name = request.form["name"]
       buying_price= request.form["buying_price"]
       selling_price=request.form["selling_price"]
-      products=(name,buying_price,selling_price)
+      image_url=request.form["image_url"]
+      products=(name,buying_price,selling_price,image_url)
       insert_products(products)
       return redirect("/products")
    
@@ -107,12 +92,22 @@ def editproducts():
       name = request.form["name"]
       buying_price= request.form["buying_price"]
       selling_price=request.form["selling_price"]
+      image_url=request.form["image_url"]
       print(name)
       print(buying_price)
       print(selling_price)
-      vs=(id,name,buying_price,selling_price)
+      vs=(id,name,buying_price,selling_price,image_url)
       update_products(vs)
       return redirect("/products")
+   
+@app.route('/deleteproduct', methods=["POST"])
+@login_required
+def deleteproduct():
+    if request.method == "POST":
+        product_id = request.form["id"]
+        delete_product(product_id)
+        return redirect("/products")
+
    
  
 @app.route('/addsales', methods=["POST", "GET"])
@@ -142,7 +137,7 @@ def stockk():
        if not session.get('logged_in'):
         return redirect(url_for('login'))
        else:
-           stockk = fetch_data("stockk")
+           stockk = fetch_data("stocks")
            prods= fetch_data("products")
            return render_template('stock.html', stockk=stockk, prods=prods)
 
@@ -228,24 +223,26 @@ def bar1():
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1, line_chart1=line_chart1, line_chart2=line_chart2)
 
 
-
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
-   error1 = None
-   if request.method == "POST":
-      full_name = request.form["full_name"]
-      email = request.form["email"]
-      password  = request.form["password"]
-      confirm_password=request.form["password"]
-      hashed_password = generate_password_hash(password)
-      users=(full_name,email, hashed_password, 'now()')
-      add_user(users)
-      error1="account created successfully..back to login"
-      if password != confirm_password:
-         error1 = "password do not match! please enter again."
-         return redirect('/register')
-   return render_template("register.html", error1=error1)
-   
+    error1 = None
+    if request.method == "POST":
+        full_name = request.form["full_name"]
+        email = request.form["email"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]  # Corrected field name
+        hashed_password = generate_password_hash(password)
+        users = (full_name, email, hashed_password, 'now()')
+
+        if password != confirm_password:
+            error1 = "Passwords do not match! Please enter again."
+        else:
+            add_user(users)
+            error1 = "Account created successfully. You can now login..."
+            return redirect('/login')  # Redirect to login on successful registration
+
+    return render_template("register.html", error1=error1)
+
       
 
 @app.route('/login', methods=["GET", "POST"])
@@ -253,10 +250,10 @@ def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        users = loginn()
+        users = fetch_data("users")
         for user in users:
-            db_email = user[0]
-            db_hashed_password = user[1]
+            db_email = user[1]
+            db_hashed_password = user[2]
             if db_email == email and check_password_hash(db_hashed_password, password):
                 session['logged_in'] = True
                 return redirect('/index')
@@ -278,7 +275,7 @@ def inject_remaining_stock():
 
 @app.context_processor
 def generate_barcode():
-    id_list = get_pid()
+    id_list = fetch_data("products")
     barcode_paths = []
     for pid_tuple in id_list:
         pid = pid_tuple[0]
@@ -296,6 +293,6 @@ def logout():
 
 
 if __name__ == '__main__': 
-    app.run(host = "0.0.0.0", port = 3400, debug=True)
+    app.run(host = "0.0.0.0",port=5001, debug=True)
   
  
