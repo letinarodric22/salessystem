@@ -43,7 +43,7 @@ def delete_product(id):
     q_delete_stocks = "DELETE FROM stocks WHERE pid = %s;"
     cur.execute(q_delete_stocks, (id,))
 
-# Delete referencing records in the "stocks" table first
+   # Delete referencing records in the "stocks" table first
     q_delete_sales = "DELETE FROM sales WHERE pid = %s;"
     cur.execute(q_delete_sales, (id,))
 
@@ -113,7 +113,7 @@ def get_remaining_stock(product_id=None):
 
 def add_user(v):
     vs = str(v)
-    q = "insert into users(full_name,email, h_password, created_at) "\
+    q = "insert into users(full_name,email,phone, h_password, created_at) "\
         "values" + vs
     cur.execute(q)
     conn.commit()

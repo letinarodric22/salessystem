@@ -1,3 +1,8 @@
+body{
+    padding-top: 72px;
+    margin: 0;
+
+}
 body .navbar {
     display: flex;
     justify-content: center;
@@ -45,11 +50,11 @@ nav h3 {
 
 
 .navbar.bg-purple {
-    background-color: rgb(224, 231, 229);
+    background-color: violet;
 }
 
 footer.bg-purple {
-    background-color: rgb(201, 211, 199);
+    background-color: purple;
 }
 
 .navbar-nav {
@@ -74,18 +79,68 @@ footer .quicks {
     list-style: none;
     font-size: 20px;
     margin-bottom: 20px;
-    padding: 10px;
+    
+    
 }
+footer .quicks .mlinks{
+    list-style: none; 
+    
+}
+footer li a{
+    color:white;
+}
+footer li a:hover{
+    color: aqua;
+}
+
 
 footer li:hover {
     font-size: 20px;
-    box-shadow: inset 10px 10px 10px 10px red;
-    border-radius: 7px;
+    color: red;
+    
 }
 
 footer li::before {
-    content: "> ";
     color: lightblue; /* Change the color of the > symbol to red */
     position: absolute; /* Position the ::before content */
     left: -5px;
 }
+
+
+    .social-links {
+        display: flex; /* Use flexbox to arrange the links horizontally */
+        justify-content: center; /* Center the links horizontally */
+        margin-top: 10px; /* Add some top margin for spacing */
+    }
+
+    .social-links .menu {
+        list-style: none;
+        padding: 0;
+        display: flex; /* Use flexbox for the menu */
+    }
+
+    .social-links .menu li {
+        margin-right: 15px; /* Adjust the right margin for spacing between links */
+    }
+
+    .social-links .menu li a {
+        font-size: 24px; /* Adjust the font size as needed */
+        color: #fff; /* Set the link color */
+        text-decoration: none; /* Remove underlines from links */
+        transition: color 0.3s; /* Add a smooth color transition */
+    }
+
+    .social-links .menu li a:hover {
+        color: #ffc107; /* Change the color on hover */
+    }
+
+    /* Add this to your styles.css file */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+}
+
+
+

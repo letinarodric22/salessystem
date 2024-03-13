@@ -3,6 +3,7 @@ from flask import (
 )
 # from flask_sqlalchemy import SQLAlchemy
 from pgfunc import *
+from sms import *
 import pygal
 import os
 from barcode import Code128
@@ -223,25 +224,60 @@ def bar1():
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1, line_chart1=line_chart1, line_chart2=line_chart2)
 
 
+
+
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
     error1 = None
+    full_name_value = ""
+    email_value = ""
+
     if request.method == "POST":
         full_name = request.form["full_name"]
         email = request.form["email"]
+        phone = request.form["phone"]
         password = request.form["password"]
-        confirm_password = request.form["confirm_password"]  # Corrected field name
         hashed_password = generate_password_hash(password)
-        users = (full_name, email, hashed_password, 'now()')
+        users = (full_name, email, phone, hashed_password, 'now()')
 
-        if password != confirm_password:
-            error1 = "Passwords do not match! Please enter again."
+        if len(password) < 8:
+            error1 = "Password should be at least 8 characters long."
+        elif not any(char.isalpha() for char in password) or not any(char.isdigit() or char.isalnum() for char in password):
+            error1 = "Password should contain letters and at least one number or symbol."
+        elif email_exists(email):
+            error1 = "This email already exists. Please choose a different email."
         else:
+            # If there are no errors, continue with user creation and redirection
             add_user(users)
-            error1 = "Account created successfully. You can now login..."
-            return redirect('/login')  # Redirect to login on successful registration
+            
+            # Create an instance of the SMS class
+            sms_instance = SMS()
+            
+            # Send SMS and get the message
+            sms_instance.send(full_name, phone)
+            
+            # Customize your flash message
+            flash(f"Dear {full_name}, welcome! Your registration is successful. Please check your phone for a confirmation message.")
+            
+            return redirect('/login')
 
-    return render_template("register.html", error1=error1)
+    # Retain entered values for error display
+    full_name_value = request.form.get("full_name", "")
+    email_value = request.form.get("email", "")
+
+    return render_template("register.html", error1=error1, full_name_value=full_name_value, email_value=email_value)
+
+def email_exists(email):
+    # Check if the email already exists in the database
+    users = fetch_data("users")
+    for user in users:
+        db_email = user[1]
+        if db_email == email:
+            return True  # Email already exists
+    return False  # Email does not exist
+
+
+
 
       
 
@@ -253,7 +289,7 @@ def login():
         users = fetch_data("users")
         for user in users:
             db_email = user[1]
-            db_hashed_password = user[2]
+            db_hashed_password = user[3]
             if db_email == email and check_password_hash(db_hashed_password, password):
                 session['logged_in'] = True
                 return redirect('/index')
@@ -293,6 +329,6 @@ def logout():
 
 
 if __name__ == '__main__': 
-    app.run(host = "0.0.0.0",port=5001, debug=True)
+    app.run(debug=True)
   
  

@@ -9,13 +9,12 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 
-   
+
 </head>
 <style>
-    body .image-section {
+    body .carousel {
         margin: 0;
         padding: 0;
-        background-image: url("static/img/img5.jpeg");
         background-size: cover;
         height: 100vh;
         display: flex;
@@ -34,7 +33,7 @@
         box-sizing: border-box;
     }
 
-    body .image-section h1 {
+    body .carousel h1 {
         align-content: flex-start;
     }
 
@@ -47,12 +46,18 @@
         height: 100vh;
     }
 
-    form{
+    form {
         margin-top: 3%;
         margin-left: 10%;
     }
-   body .py-5 .card {
-        background-color:white;
+
+    body .py-5 .card {
+        background-color: white;
+    }
+
+    .carousel-inner img {
+        width: 100%;
+        height: 100%;
     }
 </style>
 
@@ -63,34 +68,56 @@
     {% extends "layout.html" %}
     {% block content %}
 
-    <section class="image-section">
-        <div class="row">
-            <div col-3>
-                <h1 contenteditable="true">WELCOME TO OUR GROCERY </h1><br><br>
-                        <h2>The grocery store for everyone.<br>
-                            Explore, find, and buy.<br>
-                            Fill every day with groceries.<br>
-                            SAVE YOUR
-                            MONEY</h1>        
+    <!-- Carousel Section -->
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="static/img/img5.jpeg" class="d-block w-100" alt="Image 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1>Slide 1</h1>
+                    <p>Content for slide 1 goes here.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="static/img/sunset.jpg" class="d-block w-100" alt="Image 2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Slide 2</h5>
+                    <p>Content for slide 2 goes here.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="static/img/ocean.jpg" class="d-block w-100" alt="Image 3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Slide 3</h5>
+                    <p>Content for slide 3 goes here.</p>
+                </div>
             </div>
         </div>
-    </section>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 
- <!-- Product search Section -->
- <form action="/index" method="get">
-    <input type="text" name="search" placeholder="Search product">
-    <button type="submit" style='color: deeppink; background-color: beige;'>Search</button>
-</form>
+    <!-- Product search Section -->
+    <form action="/index" method="get">
+        <input type="text" name="search" placeholder="Search product">
+        <button type="submit" style='color: deeppink; background-color: beige;'>Search</button>
+    </form>
 
 
-<section class="py-5" style="background-color:white;">
-    <div class="container">
-        <h2>Featured Products:</h2>
-        <div class="row">
-            {% for p in prods %}
+    <section class="py-5" style="background-color:white;">
+        <div class="container">
+            <h2>Featured Products:</h2>
+            <div class="row">
+                {% for p in prods %}
                 <div class="col-lg-3 mb-2">
                     <div class="card" style="height: 100%;">
-                        <img src='{{ p[5] }}' alt="product image" class="card-img-top" style="height: 60%;">
+                        <img src='{{ p[5] }}' alt=" product image" class="card-img-top" style="height: 55%;">
                         <div class="card-body">
                             <h5 class="card-title" style="color: black;">{{ p[1] }}</h5>
                             <p class="card-text" style="color: black;">Kshs.{{ p[3] }}</p>
@@ -98,11 +125,11 @@
                         </div>
                     </div>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
+
         </div>
-        
-    </div>
-</section>
+    </section>
 
 
     <section id="contact">
@@ -132,8 +159,15 @@
                 </div>
             </div>
     </section>
-
-
-
     {% endblock %}
+
+    <script>
+        // JavaScript to make the carousel slide every 3 seconds
+        $(document).ready(function () {
+            $('#carouselExample').carousel({
+                interval: 3000 // 3 seconds
+            });
+        });
+    </script>
+
 </body>

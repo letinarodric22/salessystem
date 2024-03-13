@@ -44,14 +44,16 @@
                             <form action="/addsales" method="POST">
 
                                 <!-- <label for="fname">product_id:</label><br> -->
-                                <select name="pid" id="product">
+                                <select name="pid" id="product" required>
                                     <option value="">Select a product</option>
                                     {% for p in prods %}
                                     <option value="{{ p[0] }}">{{ p[1] }}</option>
                                     {% endfor %}
                                 </select><br><br>
-                                <label for="lname">quantity:</label>
-                                <input type="text" id="lname" name="quantity"><br><br>
+                                
+                                <label for="lname">Quantity:</label>
+                                <input type="text" id="lname" name="quantity" required><br><br>
+                                
 
 
 

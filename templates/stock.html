@@ -30,14 +30,14 @@
 
                             <form action="/addstock" method="POST">
 
-                                <select name="pid" id="product">
+                                <select name="pid" id="product" required>
                                     <option value="" contenteditable="true">Select a product</option>
                                     {% for p in prods %}
                                       <option value="{{ p[0] }}">{{ p[1] }}</option>
                                     {% endfor %}
                                   </select><br><br>
                                 <label for="lname">quantity:</label>
-                                <input type="text" id="lname" name="quantity"><br><br>
+                                <input type="text" id="lname" name="quantity" required><br><br>
 
                                 <button type="submit" class="btn btn-primary">Submit</button><br>
                             </form>
@@ -78,12 +78,12 @@
                             <td>{{ st[2] }}</td>
                             <td>
                                 {% if loop.index == 1 %}
-                                    {{ current_date }}  
+                                    {{ current_date }}
                                 {% else %}
-                                    {{ st[3].strftime('%d-%m-%Y') }}  
+                                    {{ st[3].strftime('%d-%m-%Y %H:%M') }}
                                 {% endif %}
                             </td>
-                        </tr>
+                            
                         {% endfor %}
                     </tbody>
                 </table>
