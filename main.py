@@ -5,7 +5,7 @@ from flask import (
 from pgfunc import *
 from sms import *
 import pygal
-import os
+import os, random
 from barcode import Code128
 from barcode.writer import ImageWriter
 from functools import wraps
@@ -49,10 +49,13 @@ def index():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
+
         search_query = request.args.get('search', default='', type=str)
         prods = fetch_data('products')
+        random.shuffle(prods)
+        random_products = random.sample(prods, 7)
         prods = [p for p in prods if search_query.lower() in p[1].lower()]
-        return render_template('index.html', search_query=search_query, prods=prods)
+        return render_template('index.html', random_products=random_products,search_query=search_query, prods=prods)
 
 
 
@@ -64,6 +67,61 @@ def products():
         prods = fetch_data("products")
         prods.reverse()
         return render_template('products.html', prods=prods)
+
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+    if not session.get('cart'):
+        session['cart'] = {}
+
+    product_id = request.form.get('id')
+    quantity = int(request.form.get('stock_quantity', 1))
+
+    # Update the cart with the new quantity
+    if product_id in session['cart']:
+        session['cart'][product_id] += quantity
+    else:
+        session['cart'][product_id] = quantity
+
+    return redirect('/products', '/cart')
+
+@app.route('/cart')
+def cart():
+    if 'cart' in session:
+        return render_template('cart.html')
+    else:
+        return render_template('cart_empty.html')
+    
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    # Process the checkout logic here
+    session.pop('cart', None)
+    return render_template('checkout_success.html')
+
+@app.route('/remove_from_cart', methods=['POST'])
+def remove_from_cart():
+    product_id = request.form.get('id')
+    if product_id in session['cart']:
+        del session['cart'][product_id]
+    return redirect('/cart')
+
+
+def calculate_cart_total():
+    # Retrieve the cart items from the session
+    cart_items = session.get('cart', [])
+
+    # Fetch product prices from the database
+    products = fetch_data("products")
+
+    # Calculate the total cart value
+    total = 0
+    for item in cart_items:
+        product_id = item['id']
+        quantity = item['quantity']
+        for product in products:
+            if product[0] == product_id:
+                price = product[3]  # Assuming price is in the fourth column
+                total += price * quantity
+    return redirect('/cart', total=total)
 
 
 
@@ -81,7 +139,8 @@ def addproducts():
       buying_price= request.form["buying_price"]
       selling_price=request.form["selling_price"]
       image_url=request.form["image_url"]
-      products=(name,buying_price,selling_price,image_url)
+      category = request.form["category"]
+      products=(name,buying_price,selling_price,image_url,category)
       insert_products(products)
       return redirect("/products")
    
@@ -94,10 +153,11 @@ def editproducts():
       buying_price= request.form["buying_price"]
       selling_price=request.form["selling_price"]
       image_url=request.form["image_url"]
+      category = request.form["category"]
       print(name)
       print(buying_price)
       print(selling_price)
-      vs=(id,name,buying_price,selling_price,image_url)
+      vs=(id,name,buying_price,selling_price,image_url,category)
       update_products(vs)
       return redirect("/products")
    
@@ -324,7 +384,7 @@ def generate_barcode():
 
 @app.route("/logout")
 def logout():
-    session.pop("username", None)
+    session.pop("username", None) 
     return redirect(url_for("login"))
 
 

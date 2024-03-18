@@ -20,7 +20,7 @@ def fetch_data(tbname):
 
 def insert_products(v):
     vs = str(v)
-    q = "insert into products(name,buying_price,selling_price, image_url) "\
+    q = "insert into products(name,buying_price,selling_price, image_url,category) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
@@ -33,8 +33,9 @@ def update_products(vs):
         buying_price = vs[2]
         selling_price = vs[3]
         image_url = vs[4]
-        q = "UPDATE products SET name = %s, buying_price = %s, selling_price = %s, image_url = %s WHERE id = %s"
-        cur.execute(q, (name, buying_price, selling_price, image_url,id))
+        category = vs[5]
+        q = "UPDATE products SET name = %s, buying_price = %s, selling_price = %s, image_url = %s, category = %s WHERE id = %s"
+        cur.execute(q, (name, buying_price, selling_price, image_url,category,id))
         conn.commit()
         return q
 

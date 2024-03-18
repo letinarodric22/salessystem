@@ -31,15 +31,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/index">
+                        <a class="nav-link" onclick="showLoader()" href="/index">
                             <i class="fas fa-home"> Home</i></a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                        <a class="nav-link" onclick="showLoader()" href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/signup">
+                        <a class="nav-link" onclick="showLoader()" href="/signup">
                             <i class="fas fa-user fa-fw"></i> Account
                         </a>
                     </li>
@@ -51,18 +51,18 @@
                             More
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/products" type="button">Products</a></li>
-                            <li><a class="dropdown-item" href="/sales" type="button">Sales</a></li>
-                            <li><a class="dropdown-item" href="/stockk" type="button">Stock</a></li>
+                            <li><a class="dropdown-item" href="/products" onclick="showLoader()" type="button">Products</a></li>
+                            <li><a class="dropdown-item" href="/sales" onclick="showLoader()" type="button">Sales</a></li>
+                            <li><a class="dropdown-item" href="/stockk" onclick="showLoader()" type="button">Stock</a></li>
                         </ul>
                     </div>
                     <li class="nav-item contact-us">
-                        <a class="nav-link" href="/index#contact">
+                        <a class="nav-link"onclick="showLoader()" href="/index#contact"> 
                             <i class="fas fa-envelope"></i> Contact us</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/index">
+                        <a class="nav-link" onclick="showLoader()" href="/index">
                             <i class="fas fa-shopping-cart"></i> Cart
                         </a>
                     </li>
@@ -73,6 +73,8 @@
         </div>
         </div>
     </nav>
+
+    <div id="loader" class="loader"></div>
 
     {% block content %}
 
@@ -171,6 +173,17 @@
             return false;
         });
     });
+
+
+    function showLoader() {
+            var loader = document.getElementById("loader");
+            loader.style.display = "block"; // Show the loader
+
+            // Hide the loader after a delay (adjust the delay as needed)
+            setTimeout(function() {
+                loader.style.display = "none";
+            }, 2000); // Adjust the delay as needed (milliseconds)
+        }
 </script>
 </body>
 

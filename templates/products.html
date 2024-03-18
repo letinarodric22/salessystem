@@ -44,6 +44,15 @@
                                             <input type="text" class="form-control" id="exampleInputPassword1"
                                                 name="image_url">
                                         </div>
+
+                                        <label for="category">Category:</label>
+                                        <select id="category" name="category">
+                                            <option value="fruits">Fruits</option>
+                                            <option value="electronics">Electronics</option>
+                                            <option value="books">Books</option>
+                                            <option value="cereals">Cereals</option>
+                                            <!-- Add more options as needed -->
+                                        </select><br>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>
                                 </div>
@@ -65,6 +74,7 @@
                         <th scope="col">Remaining_stock</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
+                        <th scope="col">add to cart</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,12 +85,10 @@
                     <td>{{ p[3] }}</td>
                     <td>
                         <img src="{{ url_for('static', filename='barcodes/' + p[0]|string + '.png.png') }}"
-                            alt="Barcode" width="100" height="100">
+                            alt="Barcode" width="50%" height="50%">
                     </td>
                     <td>
-                        <img src='{{ p[5] }}'sizes="(max-width: 600px) 100vw,
-                        (max-width: 1200px) 50vw,
-                        33.3vw" alt="product image">
+                        <img src='{{ p[5] }}' width="50%" height="50%">
                     </td>
                     {% if remain_stock(p[0]) | int < 20 %} <td style="background-color: pink;">{{
                         remain_stock(p[0])
@@ -138,6 +146,22 @@
                                                         <input type="text" class="form-control" id="image_url"
                                                             name="image_url" value="{{ p[5] }}">
                                                     </div>
+
+                                                    <label for="category">Category:</label>
+                                                    <select id="category" name="category">
+                                                        <option value="" style="color: green; font-size: 25px;">
+                                                            <h1>Select Category</h1>
+                                                        </option>
+                                                        <option value="fruits & Vegetables">Fruits & Vegetables</option>
+                                                        <option value="electronics">Electronics</option>
+                                                        <option value="beverages">Beverages</option>
+                                                        <option value="food cupboards">Food Cupboards</option>
+                                                        <option value="Beauty & Personal">Beauty & Personal</option>
+                                                        <option value="Household">Household</option>
+                                                        <option value="Fashions/Clothings">Fashions/Clothing</option>
+                                                        <option value="Miscellaneous">Miscellaneous</option>
+                                                        <!-- Add more options as needed -->
+                                                    </select><br>
                                                     <button type="submit" class="btn btn-primary">Update</button>
                                                 </form>
                                             </div>
@@ -152,6 +176,18 @@
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
+                            <td>
+                            <div>
+                                <h3>{{ p[1] }}</h3>
+                                <p>Price: {{ p[3] }}</p>
+                                <form action="/add_to_cart" method="POST">
+                                    <input type="hidden" name="product_id" value="{{ p[0]}}">
+                                    <input type="number" name="quantity" value="1" min="1">
+                                    <button type="submit">Add to Cart</button>
+                                </form>
+                            </div>
+                            </td>
+
                             </tr>
                             {% endfor %}
                 </tbody>

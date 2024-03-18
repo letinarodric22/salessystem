@@ -12,7 +12,7 @@
 
 </head>
 <style>
-    body .carousel {
+    body .carousel-inner img {
         margin: 0;
         padding: 0;
         background-size: cover;
@@ -20,7 +20,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: white;
+        color: orangered;
         background-color: #f1f1f1;
         background-blend-mode: color;
         background-color: rgba(255, 0, 0, 0.5);
@@ -33,7 +33,7 @@
         box-sizing: border-box;
     }
 
-    body .carousel h1 {
+    body .carousel-inner h1 {
         align-content: flex-start;
     }
 
@@ -70,29 +70,38 @@
 
     <!-- Carousel Section -->
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="static/img/img5.jpeg" class="d-block w-100" alt="Image 1">
-                <div class="carousel-caption d-none d-md-block">
-                    <h1>Slide 1</h1>
-                    <p>Content for slide 1 goes here.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="static/img/sunset.jpg" class="d-block w-100" alt="Image 2">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Slide 2</h5>
-                    <p>Content for slide 2 goes here.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="static/img/ocean.jpg" class="d-block w-100" alt="Image 3">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Slide 3</h5>
-                    <p>Content for slide 3 goes here.</p>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="static/img/img5.jpeg" class="d-block w-100" alt="Image 1">
+            <div class="carousel-caption d-flex align-items-center justify-content-center" style="position: absolute; top: 50%; transform: translateY(-50%);">
+                <div class="text-center">
+                    <h1>Happy Shopper Dealers</h1>
+                    <p>The shop boasts a diverse selection of high-quality products catering to various needs and preferences.</p>
                 </div>
             </div>
         </div>
+        <div class="carousel-item">
+            <img src="static/img/sunset.jpg" class="d-block w-100" alt="Image 2">
+            <div class="carousel-caption d-flex align-items-center justify-content-center" style="position: absolute; top: 50%; transform: translateY(-50%);">
+                <div class="text-center">
+                    <h5>Embrace the Persornal Care & Wellbeing</h5>
+                    <p> Its welcoming atmosphere and attentive staff ensure a pleasant and personalized shopping experience for every customer.</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="static/img/ocean.jpg" class="d-block w-100" alt="Image 3">
+            <div class="carousel-caption d-flex align-items-center justify-content-center" style="position: absolute; top: 50%; transform: translateY(-50%);">
+                <div class="text-center">
+                    <h5>Build. Grow. Explore</h5>
+                    <p>With its convenient location and competitive pricing, the shop stands as a go-to destination for all your shopping needs</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -114,7 +123,7 @@
         <div class="container">
             <h2>Featured Products:</h2>
             <div class="row">
-                {% for p in prods %}
+                {% for p in random_products %}  <!-- Limiting to only the first 7 products -->
                 <div class="col-lg-3 mb-2">
                     <div class="card" style="height: 100%;">
                         <img src='{{ p[5] }}' alt=" product image" class="card-img-top" style="height: 55%;">
@@ -127,10 +136,9 @@
                 </div>
                 {% endfor %}
             </div>
-
         </div>
     </section>
-
+    
 
     <section id="contact">
         <div class="container">
