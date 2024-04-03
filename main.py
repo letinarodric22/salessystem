@@ -1,5 +1,5 @@
 from flask import (
-    Flask, render_template, request, redirect, session, flash, url_for
+    Flask, render_template, request, redirect, session, flash, url_for,jsonify
 )
 # from flask_sqlalchemy import SQLAlchemy
 from pgfunc import *
@@ -11,6 +11,7 @@ from barcode.writer import ImageWriter
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from collections import Counter
 
 
 # Create an object called app
@@ -49,13 +50,12 @@ def index():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-
-        search_query = request.args.get('search', default='', type=str)
+        search = request.args.get('search', default='', type=str)
         prods = fetch_data('products')
         random.shuffle(prods)
         random_products = random.sample(prods, 7)
-        prods = [p for p in prods if search_query.lower() in p[1].lower()]
-        return render_template('index.html', random_products=random_products,search_query=search_query, prods=prods)
+        prods = [p for p in prods if search.lower() in p[1].lower()]
+        return render_template('index.html', random_products=random_products, search_query=search, prods=prods)
 
 
 
@@ -68,60 +68,7 @@ def products():
         prods.reverse()
         return render_template('products.html', prods=prods)
 
-@app.route("/add_to_cart", methods=["POST"])
-def add_to_cart():
-    if not session.get('cart'):
-        session['cart'] = {}
 
-    product_id = request.form.get('id')
-    quantity = int(request.form.get('stock_quantity', 1))
-
-    # Update the cart with the new quantity
-    if product_id in session['cart']:
-        session['cart'][product_id] += quantity
-    else:
-        session['cart'][product_id] = quantity
-
-    return redirect('/products', '/cart')
-
-@app.route('/cart')
-def cart():
-    if 'cart' in session:
-        return render_template('cart.html')
-    else:
-        return render_template('cart_empty.html')
-    
-@app.route('/checkout', methods=['POST'])
-def checkout():
-    # Process the checkout logic here
-    session.pop('cart', None)
-    return render_template('checkout_success.html')
-
-@app.route('/remove_from_cart', methods=['POST'])
-def remove_from_cart():
-    product_id = request.form.get('id')
-    if product_id in session['cart']:
-        del session['cart'][product_id]
-    return redirect('/cart')
-
-
-def calculate_cart_total():
-    # Retrieve the cart items from the session
-    cart_items = session.get('cart', [])
-
-    # Fetch product prices from the database
-    products = fetch_data("products")
-
-    # Calculate the total cart value
-    total = 0
-    for item in cart_items:
-        product_id = item['id']
-        quantity = item['quantity']
-        for product in products:
-            if product[0] == product_id:
-                price = product[3]  # Assuming price is in the fourth column
-                total += price * quantity
-    return redirect('/cart', total=total)
 
 
 
@@ -154,9 +101,6 @@ def editproducts():
       selling_price=request.form["selling_price"]
       image_url=request.form["image_url"]
       category = request.form["category"]
-      print(name)
-      print(buying_price)
-      print(selling_price)
       vs=(id,name,buying_price,selling_price,image_url,category)
       update_products(vs)
       return redirect("/products")
@@ -179,8 +123,129 @@ def addsales():
       sales=(pid,quantity,'now()')
       insert_sales(sales)
       return redirect("/sales")
+   
+   
 
-      
+
+@app.route('/addtocart', methods=["POST"])
+def add_to_cart():
+    if 'cart' not in session:
+        session['cart'] = []
+
+    pid = request.form["pid"]
+    quantity = int(request.form["quantity"])
+
+    # Fetch product information from the database
+    cur.execute("SELECT * FROM products WHERE id = %s", (pid,))
+    product = cur.fetchone()
+
+    if product:
+        # Check if the product is already in the cart
+        product_found = False
+        for item in session['cart']:
+            if item['pid'] == pid:
+                # If the product is already in the cart, update the quantity
+                item['quantity'] += quantity
+                product_found = True
+                break
+
+        if not product_found:
+            # If the product is not in the cart, add it
+            session['cart'].append({
+                'pid': pid,
+                'name': product[1],
+                'image': product[5],
+                'price': product[3],
+                'quantity': quantity
+            })
+
+        # Reconstruct the entire session cart with updated item quantities
+        session['cart'] = reconstruct_cart(session['cart'])
+
+        
+
+        # Redirect to view_cart route
+        return redirect('/index#py-5')
+    else:
+        return "Product not found"
+
+def insert_sales(sale_data):
+    q = "INSERT INTO sales (pid, quantity, created_at) VALUES (%s, %s, %s)"
+    cur.execute(q, sale_data)
+    conn.commit()
+
+
+def reconstruct_cart(cart):
+    reconstructed_cart = []
+    seen_pids = set()  # Track seen product IDs
+    for item in cart:
+        if item['pid'] not in seen_pids:
+            # If product ID is not seen before, add the item directly
+            reconstructed_cart.append(item)
+            seen_pids.add(item['pid'])
+        else:
+            # If product ID is seen before, update the quantity
+            for existing_item in reconstructed_cart:
+                if existing_item['pid'] == item['pid']:
+                    existing_item['quantity'] += item['quantity']
+                    break
+    return reconstructed_cart
+
+
+
+@app.route('/deletefromcart', methods=['POST'])
+def delete_from_cart():
+    if 'cart' in session:
+        pid = request.json.get('pid')
+        for item in session['cart']:
+            if item['pid'] == pid:
+                session['cart'].remove(item)  # Remove the item from the cart
+                session.modified = True  # Mark the session as modified after deletion
+                break
+        # Recalculate total price after deleting item
+        total_price = sum(float(item['price']) * int(item['quantity']) for item in session['cart'])
+        # Return JSON response with updated total price
+        return jsonify({'success': True, 'total_price': total_price})
+    return jsonify({'success': False})
+    
+
+
+@app.route('/updatecart', methods=["POST"])
+def update_cart():
+    pid = request.form["pid"]
+    quantity = int(request.form["quantity"])
+    # Update quantity of item in session cart based on pid
+    for item in session['cart']:
+        if item['pid'] == pid:
+            item['quantity'] = quantity
+            break
+    return '', 204  # Return empty response with 204 status code
+
+
+@app.context_processor
+def inject_total_items():
+    # Get the cart from the session
+    cart = session.get('cart', [])
+    # Count occurrences of each product ID in the cart
+    product_counts = Counter(item['pid'] for item in cart)
+    # Total number of specific products in the cart
+    total_items = len(product_counts)
+    return dict(total_items=total_items)
+
+
+
+
+    
+@app.route('/cart')
+def view_cart():
+    cart = session.get('cart', [])
+    total_price = sum(float(item['price']) * int(item['quantity']) for item in cart)
+    return render_template('cart.html', cart=cart, total_price=total_price)
+
+    
+
+
+
 
 @app.route("/sales")
 def sales():
@@ -229,7 +294,7 @@ def bar1():
     bar_chart=bar_chart.render_data_uri()
 
    #  line graph for sales per month
-    line_chart = pygal.Line()
+    line_chart = pygal.Bar()
     line_chart.title = 'Sales per Month'
     daily_sales = sales_per_day()
     dates = []
@@ -284,7 +349,9 @@ def bar1():
     return render_template('dashboard.html', line_chart=line_chart, bar_chart=bar_chart, bar_chart1=bar_chart1, line_chart1=line_chart1, line_chart2=line_chart2)
 
 
-
+@app.route('/admin')
+def admin():
+    return render_template("admin.html")
 
 @app.route('/signup', methods=["POST", "GET"])
 def adduser():
@@ -368,6 +435,8 @@ def inject_remaining_stock():
       stock = get_remaining_stock(product_id)
       return stock[0] if stock is not None else int("0")
     return {'remain_stock': remain_stock}
+
+
 
 @app.context_processor
 def generate_barcode():

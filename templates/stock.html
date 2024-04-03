@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Stock table</title>
 </head>
-{% extends 'layout.html'  %}
+{% extends 'admin.html'  %}
 <body>
     {% block content %}
     <div class="row">
@@ -37,7 +37,7 @@
                                     {% endfor %}
                                   </select><br><br>
                                 <label for="lname">quantity:</label>
-                                <input type="text" id="lname" name="quantity" required><br><br>
+                                <input type="number" id="lname" name="quantity" required><br><br>
 
                                 <button type="submit" class="btn btn-primary">Submit</button><br>
                             </form>

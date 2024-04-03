@@ -1,5 +1,5 @@
 <title>products table</title>
-{% extends "layout.html" %}
+{% extends "admin.html" %}
 {% block content %}
 <div class="container">
     <div class="container text-center">
@@ -74,7 +74,7 @@
                         <th scope="col">Remaining_stock</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
-                        <th scope="col">add to cart</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -150,7 +150,7 @@
                                                     <label for="category">Category:</label>
                                                     <select id="category" name="category">
                                                         <option value="" style="color: green; font-size: 25px;">
-                                                            <h1>Select Category</h1>
+                                                            {{ p[6] }}
                                                         </option>
                                                         <option value="fruits & Vegetables">Fruits & Vegetables</option>
                                                         <option value="electronics">Electronics</option>
@@ -162,6 +162,49 @@
                                                         <option value="Miscellaneous">Miscellaneous</option>
                                                         <!-- Add more options as needed -->
                                                     </select><br>
+
+                                                    <div class="col-6">
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-primary"
+                                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                            + Add Stock
+                                                        </button>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="exampleModal" tabindex="-1"
+                                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                                            Add a stock</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+
+                                                                        <form action="/addstock" method="POST">
+
+                                                                            <select name="pid" id="product" required>
+                                                                                <option value="" contenteditable="true">
+                                                                                    Select a product</option>
+                                                                                {% for p in prods %}
+                                                                                <option value="{{ p[0] }}">{{ p[1] }}
+                                                                                </option>
+                                                                                {% endfor %}
+                                                                            </select><br><br>
+                                                                            <label for="lname">quantity:</label>
+                                                                            <input type="text" id="lname"
+                                                                                name="quantity" required><br><br>
+
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary">Submit</button><br>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <button type="submit" class="btn btn-primary">Update</button>
                                                 </form>
                                             </div>
@@ -176,17 +219,7 @@
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
-                            <td>
-                            <div>
-                                <h3>{{ p[1] }}</h3>
-                                <p>Price: {{ p[3] }}</p>
-                                <form action="/add_to_cart" method="POST">
-                                    <input type="hidden" name="product_id" value="{{ p[0]}}">
-                                    <input type="number" name="quantity" value="1" min="1">
-                                    <button type="submit">Add to Cart</button>
-                                </form>
-                            </div>
-                            </td>
+
 
                             </tr>
                             {% endfor %}

@@ -70,67 +70,89 @@
 
     <!-- Carousel Section -->
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="static/img/img5.jpeg" class="d-block w-100" alt="Image 1">
-            <div class="carousel-caption d-flex align-items-center justify-content-center" style="position: absolute; top: 50%; transform: translateY(-50%);">
-                <div class="text-center">
-                    <h1>Happy Shopper Dealers</h1>
-                    <p>The shop boasts a diverse selection of high-quality products catering to various needs and preferences.</p>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="static/img/img5.jpeg" class="d-block w-100" alt="Image 1">
+                <div class="carousel-caption d-flex align-items-center justify-content-center"
+                    style="position: absolute; top: 50%; transform: translateY(-50%);">
+                    <div class="text-center">
+                        <h1>Happy Shopper Dealers</h1>
+                        <p>The shop boasts a diverse selection of high-quality products catering to various needs and
+                            preferences.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="carousel-item">
-            <img src="static/img/sunset.jpg" class="d-block w-100" alt="Image 2">
-            <div class="carousel-caption d-flex align-items-center justify-content-center" style="position: absolute; top: 50%; transform: translateY(-50%);">
-                <div class="text-center">
-                    <h5>Embrace the Persornal Care & Wellbeing</h5>
-                    <p> Its welcoming atmosphere and attentive staff ensure a pleasant and personalized shopping experience for every customer.</p>
+            <div class="carousel-item">
+                <img src="static/img/sunset.jpg" class="d-block w-100" alt="Image 2">
+                <div class="carousel-caption d-flex align-items-center justify-content-center"
+                    style="position: absolute; top: 50%; transform: translateY(-50%);">
+                    <div class="text-center">
+                        <h5>Embrace the Persornal Care & Wellbeing</h5>
+                        <p> Its welcoming atmosphere and attentive staff ensure a pleasant and personalized shopping
+                            experience for every customer.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="carousel-item">
-            <img src="static/img/ocean.jpg" class="d-block w-100" alt="Image 3">
-            <div class="carousel-caption d-flex align-items-center justify-content-center" style="position: absolute; top: 50%; transform: translateY(-50%);">
-                <div class="text-center">
-                    <h5>Build. Grow. Explore</h5>
-                    <p>With its convenient location and competitive pricing, the shop stands as a go-to destination for all your shopping needs</p>
+            <div class="carousel-item">
+                <img src="static/img/ocean.jpg" class="d-block w-100" alt="Image 3">
+                <div class="carousel-caption d-flex align-items-center justify-content-center"
+                    style="position: absolute; top: 50%; transform: translateY(-50%);">
+                    <div class="text-center">
+                        <h5>Build. Grow. Explore</h5>
+                        <p>With its convenient location and competitive pricing, the shop stands as a go-to destination
+                            for all your shopping needs</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-    </div>
-</div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
     </div>
 
     <!-- Product search Section -->
-    <form action="/index" method="get">
-        <input type="text" name="search" placeholder="Search product">
+    <!-- index.html -->
+    <form action="/index" method="GET">
+        <input type="text" name="search" placeholder="Search product" value="{{ search_query }}">
         <button type="submit" style='color: deeppink; background-color: beige;'>Search</button>
     </form>
 
 
-    <section class="py-5" style="background-color:white;">
+
+    <section class="py-5" id="py-5" style="background-color:white;">
         <div class="container">
             <h2>Featured Products:</h2>
             <div class="row">
-                {% for p in random_products %}  <!-- Limiting to only the first 7 products -->
+                {% for p in random_products %} <!-- Limiting to only the first 7 products -->
                 <div class="col-lg-3 mb-2">
                     <div class="card" style="height: 100%;">
                         <img src='{{ p[5] }}' alt=" product image" class="card-img-top" style="height: 55%;">
                         <div class="card-body">
                             <h5 class="card-title" style="color: black;">{{ p[1] }}</h5>
                             <p class="card-text" style="color: black;">Kshs.{{ p[3] }}</p>
-                            <a href="#" class="btn btn-primary">Buy Now</a>
+
+
+                            <form action="/addtocart" method="POST">
+                                <input type="hidden" name="pid" value="{{ p[0] }}">
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                        onclick="decrementQuantity(this)">-</button>
+                                    <input type="number" class="form-control" id="quantity{{ loop.index }}"
+                                        name="quantity" value="1" min="1" required>
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                        onclick="incrementQuantity(this)">+</button>
+                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -138,7 +160,7 @@
             </div>
         </div>
     </section>
-    
+
 
     <section id="contact">
         <div class="container">
@@ -168,14 +190,22 @@
             </div>
     </section>
     {% endblock %}
-
     <script>
-        // JavaScript to make the carousel slide every 3 seconds
-        $(document).ready(function () {
-            $('#carouselExample').carousel({
-                interval: 3000 // 3 seconds
-            });
-        });
+        function incrementQuantity(button) {
+            let quantityInput = button.parentElement.querySelector('input[type="number"]');
+            let currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+        }
+        
+        function decrementQuantity(button) {
+            let quantityInput = button.parentElement.querySelector('input[type="number"]');
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        }
     </script>
+    
+    
 
 </body>

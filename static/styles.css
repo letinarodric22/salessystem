@@ -110,17 +110,20 @@ footer li::before {
     .social-links {
         display: flex; /* Use flexbox to arrange the links horizontally */
         justify-content: center; /* Center the links horizontally */
-        margin-top: 10px; /* Add some top margin for spacing */
+        margin-top: 10px; 
+        z-index: 1000;/* Add some top margin for spacing */
     }
 
     .social-links .menu {
         list-style: none;
         padding: 0;
-        display: flex; /* Use flexbox for the menu */
+        display: flex;
+       /* Use flexbox for the menu */
     }
 
     .social-links .menu li {
-        margin-right: 15px; /* Adjust the right margin for spacing between links */
+        margin-right: 15px;
+           /* Adjust the right margin for spacing between links */
     }
 
     .social-links .menu li a {

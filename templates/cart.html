@@ -1,50 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
-</head>
+<title>Shopping Cart</title>
+{% extends "layout.html" %}
+{% block content %}
+
 <body>
-    <h1>Shopping Cart</h1>
-    
-    {% if session['cart'] %}
-        <table>
+    <div class="container">
+        <h1></h1>
+        <table class="table">
             <thead>
                 <tr>
-                    <th>Product</th>
-                    <th>Price</th>
+                    <th>Product Name</th>
+                    <th>Product Image</th>
                     <th>Quantity</th>
+                    <th>Price</th>
                     <th>Total</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for product_id, quantity in session['cart'].items() %}
-                    {% set product = product_id %} {# Assuming you have a function to fetch product details by ID #}
-                    <tr>
-                        <td>{{ product[0] }}</td>
-                        <td>{{ product[3] }}</td>
-                        <td>{{ quantity }}</td>
-                        <td>{{ product[3] * quantity }}</td>
-                        <td>
-                            <form action="/remove_from_cart" method="POST">
-                                <input type="hidden" name="product_id" value="{{ product_id }}">
-                                <button type="submit">Remove</button>
-                            </form>
-                        </td>
-                    </tr>
+                {% for item in cart %}
+                <tr id="item-{{ item.pid }}">
+                    <td>{{ item.name }}</td>
+                    <td>
+                        <img src='{{ item.image }}' width="20%" height="20%">
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <button class="btn btn-sm btn-outline-primary" type="button"
+                                onclick="updateQuantity('{{ item.pid }}', 'decrement')">-</button>
+                            <input type="number" class="form-control" name="quantity" value="{{ item.quantity }}"
+                                min="1" max="999" readonly>
+                            <button class="btn btn-sm btn-outline-primary" type="button"
+                                onclick="updateQuantity('{{ item.pid }}', 'increment')">+</button>
+                        </div>
+
+                    </td>
+                    <td>KES {{ item.price }}</td>
+                    <td style="color:green">KES {{ item.price|float * item.quantity|int }}</td>
+                    <td>
+                        <!-- Delete Button -->
+                        <button type="button" class="btn btn-danger"
+                            onclick="deleteItem('{{ item.pid }}')">Delete</button>
+                    </td>
+                </tr>
                 {% endfor %}
+                <tr>
+                    <td colspan="4"><strong>Total:</strong></td>
+                    <td id="total-price" style="color:rgb(0, 255, 85)" ><strong>KES {{ total_price }}</strong></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
-        
-        <p>Total: {{ calculate_cart_total() }}</p> {# Assuming you have a function to calculate the total price of the cart #}
+        <a href="/index#py-5" class="btn btn-primary">Continue Shopping</a>
 
-        <form action="/checkout" method="POST">
-            <button type="submit">Proceed to Checkout</button>
-        </form>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+        <!-- Checkout Button -->
+        <button class="btn btn-success checkout-button" onclick="checkout()">Checkout</button>
+    </div>
+
+    <script>
+        function updateQuantity(pid, action) {
+            let input = document.querySelector(`input[value='${pid}']`);
+            let currentValue = parseInt(input.value);
+            if (action === 'increment') {
+                input.value = currentValue + 1;
+            } else if (action === 'decrement' && currentValue > 1) {
+                input.value = currentValue - 1;
+            }
+            // Call function to update cart on the server using AJAX
+            updateCart(pid, input.value);
+        }
+
+        function deleteItem(pid) {
+            // Call function to delete item from cart on the server using AJAX
+            deleteFromCart(pid);
+            // Remove the corresponding row from the table
+            let row = document.getElementById(`item-${pid}`);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        function updateCart(pid, quantity) {
+            // Implement AJAX request to update cart on the server
+            // Send PID and new quantity to the server
+            fetch('/updatecart', {
+                method: 'POST',
+                body: JSON.stringify({ pid: pid, quantity: quantity }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating cart:', error);
+                });
+        }
+
+        function deleteItem(pid) {
+            // Call function to delete item from cart session on the server using AJAX
+            deleteFromCart(pid);
+            // Remove the corresponding row from the table
+            let row = document.getElementById(`item-${pid}`);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        function deleteFromCart(pid) {
+            // Implement AJAX request to delete item from cart session on the server
+            fetch('/deletefromcart', {
+                method: 'POST',
+                body: JSON.stringify({ pid: pid }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete item from cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting item from cart:', error);
+                });
+        }
+
+        // Checkout function
+        function checkout() {
+            // Implement checkout functionality here
+            alert('Checkout button clicked! Implement your checkout logic here.');
+        }
+    </script>
+
 </body>
-</html>
+{% endblock %}

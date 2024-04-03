@@ -8,6 +8,11 @@ except Exception as e:
     print(e)    
 
 
+def fetch_product(pid):
+    cur.execute("SELECT * FROM products WHERE id = %s", (pid,))
+    return cur.fetchone()
+
+
 def fetch_data(tbname):
     try:
         q = "SELECT * FROM " + tbname + ";"

@@ -22,7 +22,7 @@
             <a class="navbar-brand" href="#" style="white-space: nowrap;">
                 <img src="static/img/logo.jpg" width="60" height="35" class="d-inline-block align-top"
                     alt="LETINA-GROCER Logo">
-                <h3 class="d-inline-block ml-2 mb-0">LETINA-GROCER</h3>
+                <h3 class="d-inline-block ml-2 mb-0">INVENTORY SYSTEM</h3>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,37 +36,30 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showLoader()" href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" onclick="showLoader()" href="/signup">
                             <i class="fas fa-user fa-fw"></i> Account
                         </a>
                     </li>
-
-
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            More
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/products" onclick="showLoader()" type="button">Products</a></li>
-                            <li><a class="dropdown-item" href="/sales" onclick="showLoader()" type="button">Sales</a></li>
-                            <li><a class="dropdown-item" href="/stockk" onclick="showLoader()" type="button">Stock</a></li>
-                        </ul>
-                    </div>
                     <li class="nav-item contact-us">
                         <a class="nav-link"onclick="showLoader()" href="/index#contact"> 
                             <i class="fas fa-envelope"></i> Contact us</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showLoader()" href="/index">
-                            <i class="fas fa-shopping-cart"></i> Cart
+                        <a class="nav-link" onclick="showLoader()" href="/cart">
+                            <i class="fas fa-shopping-cart"></i> Cart 
+                            {% if total_items > 0 %}
+                                <sup><span class="badge badge-light bg-danger rounded-circle">{{ total_items }}</span></sup>
+                            {% endif %}
                         </a>
                     </li>
-
+                    
+                    
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showLoader()" href="/admin">
+                            <i class="fas fa-shopping-cart"></i> Dashboard
+                        </a>
+                    </li>
 
             </div>
             </ul>
