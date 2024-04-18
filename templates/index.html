@@ -75,33 +75,18 @@
                 <img src="static/img/img5.jpeg" class="d-block w-100" alt="Image 1">
                 <div class="carousel-caption d-flex align-items-center justify-content-center"
                     style="position: absolute; top: 50%; transform: translateY(-50%);">
-                    <div class="text-center">
-                        <h1>Happy Shopper Dealers</h1>
-                        <p>The shop boasts a diverse selection of high-quality products catering to various needs and
-                            preferences.</p>
-                    </div>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="static/img/sunset.jpg" class="d-block w-100" alt="Image 2">
+                <img src="static/img/video-bg.jpg" class="d-block w-100" alt="Image 2">
                 <div class="carousel-caption d-flex align-items-center justify-content-center"
                     style="position: absolute; top: 50%; transform: translateY(-50%);">
-                    <div class="text-center">
-                        <h5>Embrace the Persornal Care & Wellbeing</h5>
-                        <p> Its welcoming atmosphere and attentive staff ensure a pleasant and personalized shopping
-                            experience for every customer.</p>
-                    </div>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="static/img/ocean.jpg" class="d-block w-100" alt="Image 3">
+                <img src="static/img/inventory.jpg" class="d-block w-100" alt="Image 3">
                 <div class="carousel-caption d-flex align-items-center justify-content-center"
                     style="position: absolute; top: 50%; transform: translateY(-50%);">
-                    <div class="text-center">
-                        <h5>Build. Grow. Explore</h5>
-                        <p>With its convenient location and competitive pricing, the shop stands as a go-to destination
-                            for all your shopping needs</p>
-                    </div>
                 </div>
             </div>
 
@@ -124,9 +109,7 @@
         <input type="text" name="search" placeholder="Search product" value="{{ search_query }}">
         <button type="submit" style='color: deeppink; background-color: beige;'>Search</button>
     </form>
-
-
-
+    
     <section class="py-5" id="py-5" style="background-color:white;">
         <div class="container">
             <h2>Featured Products:</h2>
@@ -138,21 +121,14 @@
                         <div class="card-body">
                             <h5 class="card-title" style="color: black;">{{ p[1] }}</h5>
                             <p class="card-text" style="color: black;">Kshs.{{ p[3] }}</p>
-
-
                             <form action="/addtocart" method="POST">
                                 <input type="hidden" name="pid" value="{{ p[0] }}">
                                 <div class="input-group">
-                                    <button type="button" class="btn btn-sm btn-outline-primary"
-                                        onclick="decrementQuantity(this)">-</button>
                                     <input type="number" class="form-control" id="quantity{{ loop.index }}"
                                         name="quantity" value="1" min="1" required>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"
-                                        onclick="incrementQuantity(this)">+</button>
                                     <button type="submit" class="btn btn-primary">Add to Cart</button>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -160,6 +136,7 @@
             </div>
         </div>
     </section>
+    
 
 
     <section id="contact">
@@ -171,18 +148,18 @@
                         will be distracted by the readable</p>
                 </div>
                 <div class="col-md-6 left-section">
-                    <form style=" color: black;">
+                    <form action="{{ url_for('send_message') }}" method="post" style="color: black;">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" required>
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

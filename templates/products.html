@@ -162,71 +162,34 @@
                                                         <option value="Miscellaneous">Miscellaneous</option>
                                                         <!-- Add more options as needed -->
                                                     </select><br>
-
-                                                    <div class="col-6">
-                                                        <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-primary"
-                                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                            + Add Stock
-                                                        </button>
-                                                        <!-- Modal -->
-                                                        <div class="modal fade" id="exampleModal" tabindex="-1"
-                                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLabel">
-                                                                            Add a stock</h5>
-                                                                        <button type="button" class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-
-                                                                        <form action="/addstock" method="POST">
-
-                                                                            <select name="pid" id="product" required>
-                                                                                <option value="" contenteditable="true">
-                                                                                    Select a product</option>
-                                                                                {% for p in prods %}
-                                                                                <option value="{{ p[0] }}">{{ p[1] }}
-                                                                                </option>
-                                                                                {% endfor %}
-                                                                            </select><br><br>
-                                                                            <label for="lname">quantity:</label>
-                                                                            <input type="text" id="lname"
-                                                                                name="quantity" required><br><br>
-
-                                                                            <button type="submit"
-                                                                                class="btn btn-primary">Submit</button><br>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                     <button type="submit" class="btn btn-primary">Update</button>
-                                                </form>
+                                                    <div class="col-6">
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                <!-- Delete Button -->
-                                <form action="/deleteproduct" method="POST">
-                                    <input type="hidden" name="id" value="{{ p[0] }}">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
-                            </td>
-
-
-                            </tr>
-                            {% endfor %}
-                </tbody>
-            </table>
         </div>
     </div>
+</div>
+</div>
+</td>
+<td>
+    <!-- Delete Button -->
+    <form action="/deleteproduct" method="POST">
+        <input type="hidden" name="id" value="{{ p[0] }}">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</td>
+
+
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 {% endblock %}

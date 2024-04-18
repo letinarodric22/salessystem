@@ -44,6 +44,12 @@
                         <a class="nav-link"onclick="showLoader()" href="/index#contact"> 
                             <i class="fas fa-envelope"></i> Contact us</a>
                     </li>
+
+                    <li class="nav-item category">
+                        <a class="nav-link"onclick="showLoader()" href="/categories"> 
+                            <i class="fa fa-list" aria-hidden="true"></i>Category</a>
+                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" onclick="showLoader()" href="/cart">
                             <i class="fas fa-shopping-cart"></i> Cart 
@@ -52,6 +58,9 @@
                             {% endif %}
                         </a>
                     </li>
+
+                  
+                    
                     
                     
                     
@@ -177,6 +186,36 @@
                 loader.style.display = "none";
             }, 2000); // Adjust the delay as needed (milliseconds)
         }
+</script>
+
+<script>
+    // Fetch categories from the server
+    fetch("/categories")
+        .then(response => response.json())
+        .then(categories => {
+            const categoryMenu = document.getElementById('categoryMenu');
+            categories.forEach(category => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.classList.add('dropdown-item');
+                a.href = "#";
+                a.textContent = category;
+                // Attach event listener to display products for the selected category
+                a.addEventListener('mouseenter', function() {
+                    displayProductsForCategory(category);
+                });
+                li.appendChild(a);
+                categoryMenu.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error fetching categories:', error));
+
+    function displayProductsForCategory(category) {
+        // Here, you can implement logic to display products for the selected category
+        // For example, you can make an AJAX request to fetch products based on the category
+        // and then update the UI accordingly.
+        console.log("Displaying products for category: " + category);
+    }
 </script>
 </body>
 

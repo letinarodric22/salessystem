@@ -4,6 +4,9 @@ from flask import (
 # from flask_sqlalchemy import SQLAlchemy
 from pgfunc import *
 from sms import *
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import pygal
 import os, random
 from barcode import Code128
@@ -50,13 +53,13 @@ def index():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        search = request.args.get('search', default='', type=str)
+        search_query = request.args.get('search', default='', type=str)
         prods = fetch_data('products')
         random.shuffle(prods)
         random_products = random.sample(prods, 7)
-        prods = [p for p in prods if search.lower() in p[1].lower()]
-        return render_template('index.html', random_products=random_products, search_query=search, prods=prods)
-
+        if search_query:
+            prods = [p for p in prods if search_query.lower() in p[1]]
+        return render_template('index.html', random_products=random_products, search_query=search_query, prods=prods)
 
 
 @app.route("/products")
@@ -66,7 +69,26 @@ def products():
       else:
         prods = fetch_data("products")
         prods.reverse()
-        return render_template('products.html', prods=prods)
+        ser = {i[2] for i in prods}
+    # Create a dictionary to store items grouped by category
+        items_by_category = {category: [] for category in ser}
+    # Populate the items_by_category dictionary
+        for item in prods:
+            category = item[2]  # Assuming servicetype is at index 1
+            items_by_category[category].append(item)
+        return render_template('products.html', prods=prods,items_by_category=items_by_category)
+      
+@app.route('/categories')
+def categories():
+    prods = fetch_data("products")
+    ser = {i[6] for i in prods}
+    # Create a dictionary to store items grouped by category
+    items_by_category = {category: [] for category in ser}
+    # Populate the items_by_category dictionary
+    for item in prods:
+        category = item[6]  # Assuming servicetype is at index 1
+        items_by_category[category].append(item)
+    return render_template("category.html", items_by_category=items_by_category, prods=prods)    
 
 
 
@@ -148,7 +170,6 @@ def add_to_cart():
                 item['quantity'] += quantity
                 product_found = True
                 break
-
         if not product_found:
             # If the product is not in the cart, add it
             session['cart'].append({
@@ -158,21 +179,12 @@ def add_to_cart():
                 'price': product[3],
                 'quantity': quantity
             })
-
         # Reconstruct the entire session cart with updated item quantities
         session['cart'] = reconstruct_cart(session['cart'])
-
-        
-
         # Redirect to view_cart route
         return redirect('/index#py-5')
     else:
         return "Product not found"
-
-def insert_sales(sale_data):
-    q = "INSERT INTO sales (pid, quantity, created_at) VALUES (%s, %s, %s)"
-    cur.execute(q, sale_data)
-    conn.commit()
 
 
 def reconstruct_cart(cart):
@@ -233,18 +245,26 @@ def inject_total_items():
     return dict(total_items=total_items)
 
 
-
-
     
 @app.route('/cart')
 def view_cart():
     cart = session.get('cart', [])
     total_price = sum(float(item['price']) * int(item['quantity']) for item in cart)
-    return render_template('cart.html', cart=cart, total_price=total_price)
+    return render_template('cart.html', cart=cart, total_price=total_price, thank_you=True)
 
     
-
-
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    if 'cart' in session:
+        # Iterate over each item in the cart and insert into the sales table
+        for item in session['cart']:
+            sales = (item['pid'], item['quantity'], 'now()')
+            insert_sales(sales)
+        # After inserting sales, clear the cart
+        session.pop('cart', None)
+        return render_template('cart.html', thank_you=True)    # Redirect to the sales page or any other desired page
+    else:
+        return "Your cart is empty"
 
 
 @app.route("/sales")
@@ -358,7 +378,6 @@ def adduser():
     error1 = None
     full_name_value = ""
     email_value = ""
-
     if request.method == "POST":
         full_name = request.form["full_name"]
         email = request.form["email"]
@@ -366,7 +385,6 @@ def adduser():
         password = request.form["password"]
         hashed_password = generate_password_hash(password)
         users = (full_name, email, phone, hashed_password, 'now()')
-
         if len(password) < 8:
             error1 = "Password should be at least 8 characters long."
         elif not any(char.isalpha() for char in password) or not any(char.isdigit() or char.isalnum() for char in password):
@@ -374,24 +392,13 @@ def adduser():
         elif email_exists(email):
             error1 = "This email already exists. Please choose a different email."
         else:
-            # If there are no errors, continue with user creation and redirection
             add_user(users)
-            
-            # Create an instance of the SMS class
             sms_instance = SMS()
-            
-            # Send SMS and get the message
             sms_instance.send(full_name, phone)
-            
-            # Customize your flash message
             flash(f"Dear {full_name}, welcome! Your registration is successful. Please check your phone for a confirmation message.")
-            
             return redirect('/login')
-
-    # Retain entered values for error display
     full_name_value = request.form.get("full_name", "")
     email_value = request.form.get("email", "")
-
     return render_template("register.html", error1=error1, full_name_value=full_name_value, email_value=email_value)
 
 def email_exists(email):
@@ -405,8 +412,6 @@ def email_exists(email):
 
 
 
-
-      
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -427,8 +432,6 @@ def login():
 # def logout():
 #     session.pop('logged_in', None)
 #     return redirect(url_for('login'))
-
-
 @app.context_processor
 def inject_remaining_stock():
     def remain_stock(product_id=None):
@@ -455,6 +458,42 @@ def generate_barcode():
 def logout():
     session.pop("username", None) 
     return redirect(url_for("login"))
+
+def send_email(name, email, message):
+    sender_email = "letinaroderick@gmail.com"  # Your email
+    sender_password = "uill pfri islt yldd"  # Your email password
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = "letinaroderick@gmail.com"
+    msg['Subject'] = "New Message from Contact Form"
+
+    body = f"Name: {name}\nEmail: {email}\nMessage: {message}"
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+            smtp_server.login(sender_email, sender_password)
+            smtp_server.send_message(msg)
+        return True
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
+
+@app.route('/contact')
+def contact():
+    return render_template('index.html#contact')
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    name = request.form['name']
+    email = request.form['email']
+    message = request.form['message']
+    
+    if send_email(name, email, message):
+        return 'Message sent successfully!'
+    else:
+        return 'Error sending message. Please try again later.'
 
 
 if __name__ == '__main__': 

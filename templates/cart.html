@@ -45,16 +45,29 @@
                 {% endfor %}
                 <tr>
                     <td colspan="4"><strong>Total:</strong></td>
-                    <td id="total-price" style="color:rgb(0, 255, 85)" ><strong>KES {{ total_price }}</strong></td>
+                    <td id="total-price" style="color:rgb(0, 255, 85)"><strong>KES {{ total_price }}</strong></td>
                     <td></td>
                 </tr>
             </tbody>
         </table>
-        <a href="/index#py-5" class="btn btn-primary">Continue Shopping</a>
-
-        <!-- Checkout Button -->
-        <button class="btn btn-success checkout-button" onclick="checkout()">Checkout</button>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="/index#py-5" class="btn btn-primary">Continue Shopping</a>
+                </div>
+                <div class="col-md-6">
+                    <!-- Checkout Button -->
+                    <form action="{{ url_for('checkout') }}" method="post" class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">Checkout</button>
+                    </form>
+                </div>
+            </div>
+        </div>{% if thank_you %}
+        <h2>Thank you for shopping with us!</h2>
+    {% endif %}
     </div>
+
+    
 
     <script>
         function updateQuantity(pid, action) {

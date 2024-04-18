@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pricing</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <style>
+        .pricing-table {
+            margin-bottom: 100px;
+            /* Add margin between tables */
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" style="padding: 100px 100px">
+        {% for category, items in items_by_category.items() %}
+        <div class="pricing-table">
+            <h2> {{ category }}</h2>
+            <table id="table_{{ loop.index }}" class="display">
+                <thead>
+                    <tr>
+
+                        <th>Item</th>
+                        <th>image</th>
+                        <th>Price</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item[1] }}</td>
+                        <td>
+                            <img src='{{ item[5] }}' width="20%" height="20%">
+                        </td>
+                        <td>{{ item[3] }}</td>
+                        <td><form action="/addtocart" method="POST">
+                            <input type="hidden" name="pid" value="{{ item[0] }}">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="quantity{{ loop.index }}"
+                                    name="quantity" value="1" min="1" required>
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </div>
+                        </form></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script>
+        // Make sure to wait for the document to be ready before initializing DataTable
+        $(document).ready(function () {
+            {% for category, items in items_by_category.items() %}
+            $("#table_{{ loop.index }}").DataTable();
+            {% endfor %}
+        });
+    </script>
+</body>
+
+</html>
+{% endblock %}
