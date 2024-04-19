@@ -23,22 +23,22 @@
 
         </h2>
         </p>
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <embed src="{{ bar_chart|safe }}" alt="bar Chart">
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <embed src="{{ bar_chart1|safe }}" alt="bar Chart">
+            </div>
 
-        <div class="col-lg-12 col-sm-12">
-            <embed src="{{ bar_chart|safe }}" alt="bar Chart">
+
+            <div class="col-lg-6 col-sm-12"> <embed src="{{ line_chart|safe }}" alt="line graph"></div>
+
+            <div class="col-lg-6 col-sm-12"><embed src="{{ line_chart1|safe }}" alt="line graph"></div>
+
+
+            <div class="col-lg-6 col-sm-12"><embed src="{{ line_chart2|safe }}" alt="line graph"></div>
         </div>
-        <div class="col-lg-12 col-sm-12">
-            <embed src="{{ bar_chart1|safe }}" alt="bar Chart">
-        </div>
-
-
-        <div class="col-lg-12 col-sm-12"> <embed src="{{ line_chart|safe }}" alt="line graph"></div>
-
-        <div class="col-lg-12 col-sm-12"><embed src="{{ line_chart1|safe }}" alt="line graph"></div>
-
-        
-            <div class="col-lg-12 col-sm-12"><embed src="{{ line_chart2|safe }}" alt="line graph"></div>
-        
     </div>
 
     {% endblock %}

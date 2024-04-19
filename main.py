@@ -16,7 +16,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from collections import Counter
 
-
 # Create an object called app
 # __name__ is used to tell Flask where to access HTML Files
 # All HTML files are put inside "templates" folder by convention.... Flask follows a concept called "templating"
@@ -29,12 +28,19 @@ app.secret_key = os.urandom(24)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@5432/inventory'
 # db = SQLAlchemy(app)
 
-
-
 def login_required(view_func):
     @wraps(view_func)
     def decorated_view(*args, **kwargs):
         if not session.get('logged_in'):
+            return redirect(url_for('login'))
+        return view_func(*args, **kwargs)
+    return decorated_view
+
+
+def admin_required(view_func):
+    @wraps(view_func)
+    def decorated_view(*args, **kwargs):
+        if not session.get('logged_in') or not session.get('is_admin'):
             return redirect(url_for('login'))
         return view_func(*args, **kwargs)
     return decorated_view
@@ -370,6 +376,7 @@ def bar1():
 
 
 @app.route('/admin')
+@login_required
 def admin():
     return render_template("admin.html")
 
@@ -383,8 +390,9 @@ def adduser():
         email = request.form["email"]
         phone = request.form["phone"]
         password = request.form["password"]
+        role = 'user'  # Set the default role to 'user'
         hashed_password = generate_password_hash(password)
-        users = (full_name, email, phone, hashed_password, 'now()')
+        users = (full_name, email, phone, hashed_password, 'now()', role)  # Include the role parameter
         if len(password) < 8:
             error1 = "Password should be at least 8 characters long."
         elif not any(char.isalpha() for char in password) or not any(char.isdigit() or char.isalnum() for char in password):
@@ -400,6 +408,7 @@ def adduser():
     full_name_value = request.form.get("full_name", "")
     email_value = request.form.get("email", "")
     return render_template("register.html", error1=error1, full_name_value=full_name_value, email_value=email_value)
+
 
 def email_exists(email):
     # Check if the email already exists in the database
@@ -422,11 +431,16 @@ def login():
         for user in users:
             db_email = user[1]
             db_hashed_password = user[3]
+            role = user[5]  # Assuming role is stored at index 5 in the user tuple
             if db_email == email and check_password_hash(db_hashed_password, password):
                 session['logged_in'] = True
-                return redirect('/index')
+                if role == 'admin':
+                    return redirect('/admin')  # Redirect admin users to admin page
+                else:
+                    return redirect('/index')  # Redirect non-admin users to index page
         flash('Incorrect email or password, please try again.', 'error')
     return render_template("login.html")
+
 
 # @app.route('/logout')
 # def logout():

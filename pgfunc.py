@@ -119,7 +119,7 @@ def get_remaining_stock(product_id=None):
 
 def add_user(v):
     vs = str(v)
-    q = "insert into users(full_name,email,phone, h_password, created_at) "\
+    q = "insert into users(full_name,email,phone, h_password, created_at,role) "\
         "values" + vs
     cur.execute(q)
     conn.commit()
