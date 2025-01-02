@@ -1,0 +1,15 @@
+Flask
+Flask-RESTful
+Flask-SQLAlchemy
+Flask-WTF
+WTForms
+Werkzeug
+Jinja2
+itsdangerous
+MarkupSafe
+psycopg2-binary
+requests
+SQLAlchemy
+pygal
+barcode
+africastalking

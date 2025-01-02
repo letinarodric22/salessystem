@@ -3,7 +3,7 @@ from flask import (
 )
 # from flask_sqlalchemy import SQLAlchemy
 from pgfunc import *
-from sms import *
+
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -465,7 +465,7 @@ def generate_barcode():
         barcode_path = f"static/barcodes/{pid}.png"
         code.save(barcode_path)
         barcode_paths.append(barcode_path)
-    return {'generate_barcode': generate_barcode}
+    return {'barcode_paths': barcode_paths}
 
 
 @app.route("/logout")

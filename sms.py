@@ -1,6 +1,6 @@
 # works with both python 2 and 3
 from __future__ import print_function
-from main import adduser
+from app import adduser
 
 
 import africastalking
