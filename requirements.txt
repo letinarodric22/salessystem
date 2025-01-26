@@ -11,6 +11,6 @@ psycopg2-binary
 requests
 SQLAlchemy
 pygal
-barcodej
+barcode
 africastalking
 gunicorn

@@ -455,17 +455,41 @@ def inject_remaining_stock():
 
 
 
+# @app.context_processor
+# def generate_barcode():
+#     id_list = fetch_data("products")
+#     barcode_paths = []
+#     for pid_tuple in id_list:
+#         pid = pid_tuple[0]
+#         code = Code128(str(pid), writer=ImageWriter())
+#         barcode_path = f"static/barcodes/{pid}.png"
+#         code.save(barcode_path)
+#         barcode_paths.append(barcode_path)
+#     return {'barcode_paths': barcode_paths}
+
 @app.context_processor
 def generate_barcode():
+    print("Generating barcodes...")  # Debug statement
     id_list = fetch_data("products")
     barcode_paths = []
+    
     for pid_tuple in id_list:
         pid = pid_tuple[0]
-        code = Code128(str(pid), writer=ImageWriter())
+        
+        # Debug the `Code128` object before using it
+        print(f"Creating barcode for PID: {pid}")
+        try:
+            code = Code128(str(pid), writer=ImageWriter())  # Try block
+        except Exception as e:
+            print(f"Error creating barcode for PID {pid}: {e}")
+            continue
+        
         barcode_path = f"static/barcodes/{pid}.png"
         code.save(barcode_path)
         barcode_paths.append(barcode_path)
+    
     return {'barcode_paths': barcode_paths}
+
 
 
 @app.route("/logout")
